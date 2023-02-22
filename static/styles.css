@@ -1,1 +1,12 @@
-/*# sourceMappingURL=styles.css.map */
+.navbar {
+  background-color: #BEE5BF;
+}
+.navbar .navbar-brand img {
+  width: 30px;
+}
+.navbar .row {
+  width: 50%;
+}
+.navbar .row .col a {
+  font-size: 20px;
+}/*# sourceMappingURL=styles.css.map */

@@ -1,3 +1,28 @@
-@media (max-width: 641px) {
+$BROWN: #6F5E53;
+$GREEN: #003E1F;
+$LIGHT_GREEN: #BEE5BF;
+
+.navbar {
+    background-color: #BEE5BF;
+
+    .navbar-brand {
+        img {
+            width: 30px;
+        }
+    }
+
+    .row {
+        width: 50%;
+
+        .col {
+
+            a {
+                font-size: 20px;
+            }
+        }
+    }
 
 }
+
+
+@media (max-width: 641px) {}
