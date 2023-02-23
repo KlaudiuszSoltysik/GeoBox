@@ -35,10 +35,100 @@
   width: 42px;
 }
 
+.log-in-form {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background-color: white;
+  box-shadow: 0 0 5px black;
+}
+.log-in-form .btn-close {
+  position: fixed;
+  right: 0;
+  top: 0;
+  transform: translate(-50%, 50%);
+}
+.log-in-form .btn {
+  color: white;
+  padding: 7px 13px;
+  margin-top: 10px;
+  width: 100%;
+}
+.log-in-form .btn:hover {
+  color: white;
+}
+.log-in-form .log-in-btn {
+  color: black;
+  background-color: #BEE5BF;
+  padding: 7px 13px;
+  margin-top: 10px;
+}
+.log-in-form .log-in-btn:hover {
+  color: black;
+}
+.log-in-form .sign-up-btn {
+  background-color: #003E1F;
+}
+.log-in-form .google-btn {
+  background-color: #DB4437;
+  margin-top: 45px;
+}
+.log-in-form .facebook-btn {
+  background-color: #4267B2;
+}
+
+input[type=text],
+input[type=password] {
+  border-radius: 15px;
+  padding: 7px 13px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+  border: 2px solid black;
+  border-radius: 5px;
+  transform: translateY(5px);
+  margin-right: 10px;
+  accent-color: #003E1F;
+}
+
+.sign-up-form {
+  padding: 35px;
+}
+.sign-up-form .btn {
+  color: black;
+  background-color: #BEE5BF !important;
+  padding: 7px 13px;
+  margin-top: 10px;
+  width: 100%;
+}
+.sign-up-form .btn:hover {
+  color: black;
+}
+
 @media (min-width: 640px) {
   .logo {
     flex: 0 0 auto;
     width: 70%;
     text-align: left;
+  }
+  .log-in-form,
+  .sign-up-form {
+    padding: 50px 100px;
+    width: 50%;
+  }
+}
+@media (max-width: 640px) {
+  .log-in-form,
+  .sign-up-form {
+    padding: 35px;
+    width: 80%;
   }
 }/*# sourceMappingURL=styles.css.map */

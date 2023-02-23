@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="form-group sign-up-form container-fluid">
+  <form method="POST" action="">
+    {% csrf_token %}
+    <h1>Sign up</h1>
+    <label for="email">Email</label><br>
+    <input type="text" placeholder="Enter Email" name="email" required><br>
+    <label for="password">Password</label><br>
+    <input type="password" placeholder="Enter Password" name="password" required><br>
+    <button type="submit" class="btn log-in-btn">Sign up</button>
+  </form>
+</div>
+
+{% endblock %}

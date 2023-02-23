@@ -22,18 +22,35 @@
   <div class="container-fluid text-center header">
     <div class="row">
       <div class="col logo">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'index' %}">
           <img src="static/images/box-160x160.png" id="logo">
           GeoBox
         </a>
       </div>
       <div class="col">
-        <a id="install-app">Install</a>
+        <a id="install-button">Install</a>
       </div>
       <div class="col">
-        <a>Log in</a>
+        <a id="log-in-button">Log in</a>
       </div>
     </div>
+  </div>
+
+  <div class="form-group log-in-form" id="log-in-form">
+    <button type="button" class="btn-close" id="close-log-in" aria-label="Close"></button>
+    <form method="POST" action="">
+      {% csrf_token %}
+      <h1>Log in</h1>
+      <label for="email">Email</label><br>
+      <input type="text" placeholder="Enter Email" name="email" required><br>
+      <label for="password">Password</label><br>
+      <input type="password" placeholder="Enter Password" name="password" required><br>
+      <input type="checkbox" name="remember-me"><label for="remember-me">Remember me</label>
+      <button type="submit" class="btn log-in-btn">Log in</button>
+    </form>
+    <a href="{% url 'sign_up' %}" class="btn sign-up-btn">Sign up</a>
+    <a class="btn google-btn">Log in with Google</a>
+    <a class="btn facebook-btn">Log in with Facebook</a>
   </div>
 
   {% block content %}

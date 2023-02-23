@@ -1,7 +1,3 @@
-$BROWN: #6F5E53;
-$GREEN: #003E1F;
-$LIGHT_GREEN: #BEE5BF;
-
 .header {
     background-color: #BEE5BF;
     padding: 12px;
@@ -47,12 +43,113 @@ $LIGHT_GREEN: #BEE5BF;
     }
 }
 
+.log-in-form {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background-color: white;
+    box-shadow: 0 0 5px black;
+
+    .btn-close {
+        position: fixed;
+        right: 0;
+        top: 0;
+        transform: translate(-50%, 50%);
+    }
+
+    .btn {
+        color: white;
+        padding: 7px 13px;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .btn:hover {
+        color: white;
+    }
+
+    .log-in-btn {
+        color: black;
+        background-color: #BEE5BF;
+        padding: 7px 13px;
+        margin-top: 10px;
+    }
+
+    .log-in-btn:hover {
+        color: black;
+    }
+
+    .sign-up-btn {
+        background-color: #003E1F;
+    }
+
+    .google-btn {
+        background-color: #DB4437;
+        margin-top: 45px;
+    }
+
+    .facebook-btn {
+        background-color: #4267B2;
+    }
+}
+
+input[type=text],
+input[type=password] {
+    border-radius: 15px;
+    padding: 7px 13px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+input[type=checkbox] {
+    width: 20px;
+    height: 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+    transform: translateY(5px);
+    margin-right: 10px;
+    accent-color: #003E1F;
+}
+
+.sign-up-form {
+    padding: 35px;
+
+    .btn {
+        color: black;
+        background-color: #BEE5BF !important;
+        padding: 7px 13px;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .btn:hover {
+        color: black;
+    }
+}
+
 @media (min-width: 640px) {
     .logo {
         flex: 0 0 auto;
         width: 70%;
         text-align: left;
     }
+
+    .log-in-form,
+    .sign-up-form {
+        padding: 50px 100px;
+        width: 50%;
+    }
 }
 
-@media (max-width: 640px) {}
+@media (max-width: 640px) {
+
+    .log-in-form,
+    .sign-up-form {
+        padding: 35px;
+        width: 80%;
+    }
+}
