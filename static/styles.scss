@@ -2,27 +2,57 @@ $BROWN: #6F5E53;
 $GREEN: #003E1F;
 $LIGHT_GREEN: #BEE5BF;
 
-.navbar {
+.header {
     background-color: #BEE5BF;
+    padding: 12px;
 
-    .navbar-brand {
-        img {
-            width: 30px;
-        }
+    #logo {
+        width: 35px;
     }
 
-    .row {
-        width: 50%;
-
-        .col {
-
-            a {
-                font-size: 20px;
-            }
-        }
+    a {
+        font-size: 22px;
+        cursor: pointer;
     }
-
 }
 
+.footer {
+    background-color: #6F5E53;
+    color: white;
 
-@media (max-width: 641px) {}
+    .col {
+        padding: 15px;
+    }
+
+    a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .link:hover {
+        text-decoration: underline;
+    }
+
+    .title {
+        font-size: larger;
+    }
+
+    .icon {
+        width: 40px;
+        filter: invert(1);
+    }
+
+    .tiktok {
+        width: 42px;
+    }
+}
+
+@media (min-width: 640px) {
+    .logo {
+        flex: 0 0 auto;
+        width: 70%;
+        text-align: left;
+    }
+}
+
+@media (max-width: 640px) {}

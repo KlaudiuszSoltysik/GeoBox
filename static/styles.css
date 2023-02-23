@@ -1,12 +1,44 @@
-.navbar {
+.header {
   background-color: #BEE5BF;
+  padding: 12px;
 }
-.navbar .navbar-brand img {
-  width: 30px;
+.header #logo {
+  width: 35px;
 }
-.navbar .row {
-  width: 50%;
+.header a {
+  font-size: 22px;
+  cursor: pointer;
 }
-.navbar .row .col a {
-  font-size: 20px;
+
+.footer {
+  background-color: #6F5E53;
+  color: white;
+}
+.footer .col {
+  padding: 15px;
+}
+.footer a {
+  color: white;
+  text-decoration: none;
+}
+.footer .link:hover {
+  text-decoration: underline;
+}
+.footer .title {
+  font-size: larger;
+}
+.footer .icon {
+  width: 40px;
+  filter: invert(1);
+}
+.footer .tiktok {
+  width: 42px;
+}
+
+@media (min-width: 640px) {
+  .logo {
+    flex: 0 0 auto;
+    width: 70%;
+    text-align: left;
+  }
 }/*# sourceMappingURL=styles.css.map */
