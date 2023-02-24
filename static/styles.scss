@@ -1,155 +1,175 @@
-.header {
-    background-color: #BEE5BF;
-    padding: 12px;
-
-    #logo {
-        width: 35px;
-    }
-
-    a {
-        font-size: 22px;
-        cursor: pointer;
-    }
-}
-
-.footer {
-    background-color: #6F5E53;
-    color: white;
-
-    .col {
-        padding: 15px;
-    }
-
-    a {
-        color: white;
-        text-decoration: none;
-    }
-
-    .link:hover {
-        text-decoration: underline;
-    }
-
-    .title {
-        font-size: larger;
-    }
-
-    .icon {
-        width: 40px;
-        filter: invert(1);
-    }
-
-    .tiktok {
-        width: 42px;
-    }
-}
-
-.log-in-form {
-    display: none;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    background-color: white;
-    box-shadow: 0 0 5px black;
-
-    .btn-close {
-        position: fixed;
-        right: 0;
-        top: 0;
-        transform: translate(-50%, 50%);
-    }
-
-    .btn {
-        color: white;
-        padding: 7px 13px;
-        margin-top: 10px;
-        width: 100%;
-    }
-
-    .btn:hover {
-        color: white;
-    }
-
-    .log-in-btn {
-        color: black;
-        background-color: #BEE5BF;
-        padding: 7px 13px;
-        margin-top: 10px;
-    }
-
-    .log-in-btn:hover {
-        color: black;
-    }
-
-    .sign-up-btn {
-        background-color: #003E1F;
-    }
-
-    .google-btn {
-        background-color: #DB4437;
-        margin-top: 45px;
-    }
-
-    .facebook-btn {
-        background-color: #4267B2;
-    }
+.btn {
+  padding: 7px 13px;
+  margin-top: 10px;
+  border-radius: 15px;
 }
 
 input[type=text],
 input[type=password] {
-    border-radius: 15px;
-    padding: 7px 13px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    width: 100%;
+  border-radius: 15px;
+  padding: 7px 13px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  width: 100%;
 }
 
-input[type=checkbox] {
-    width: 20px;
-    height: 20px;
-    border: 2px solid black;
-    border-radius: 5px;
-    transform: translateY(5px);
-    margin-right: 10px;
-    accent-color: #003E1F;
+.header {
+  background-color: #BEE5BF;
+  padding: 12px;
+
+  #logo {
+    width: 35px;
+  }
+
+  a {
+    font-size: 22px;
+    cursor: pointer;
+  }
+}
+
+.footer {
+  background-color: #6F5E53;
+  color: white;
+
+  .col {
+    padding: 15px;
+  }
+
+  .icon-col {
+    padding: 0;
+  }
+
+  .icon {
+    filter: invert(1);
+    padding: 15px 0;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .link:hover {
+    text-decoration: underline;
+  }
+
+  .title {
+    font-size: larger;
+  }
+}
+
+.log-in-form {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background-color: white;
+  box-shadow: 0 0 5px black;
+  
+  .btn-close {
+    position: fixed;
+    right: 0;
+    top: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  .btn {
+    color: white;
+    width: 100%;
+  }
+
+  .btn:hover {
+    color: white;
+  }
+
+  .log-in-btn {
+    color: black;
+    background-color: #BEE5BF;
+    padding: 7px 13px;
+    margin-top: 10px;
+  }
+
+  .log-in-btn:hover {
+    color: black;
+  }
+
+  .sign-up-btn {
+    margin-top: 45px;
+    background-color: #003E1F;
+  }
+
+  .google-btn {
+    background-color: #DB4437;
+  }
+
+  .facebook-btn {
+    background-color: #4267B2;
+  }
 }
 
 .sign-up-form {
-    padding: 35px;
+  .btn {
+    color: black;
+    background-color: #BEE5BF !important;
+    width: 100%;
+  }
 
-    .btn {
-        color: black;
-        background-color: #BEE5BF !important;
-        padding: 7px 13px;
-        margin-top: 10px;
-        width: 100%;
-    }
+  .btn:hover {
+    color: black;
+  }
+}
 
-    .btn:hover {
-        color: black;
-    }
+.index {
+  padding: 30px 0;
+
+  h1 {
+    text-align: center;
+  }
+
+  h2 {
+    text-align: center;
+  }
+}
+
+#sign-up-requirements {
+  color: white;
+  transition: color 1s ease;
 }
 
 @media (min-width: 640px) {
+  .header {
     .logo {
-        flex: 0 0 auto;
-        width: 70%;
-        text-align: left;
+      flex: 0 0 auto;
+      width: 70%;
+      text-align: left;
     }
+  }
 
-    .log-in-form,
-    .sign-up-form {
-        padding: 50px 100px;
-        width: 50%;
+  .footer {
+    .icon {
+      width: 50px;
     }
+  }
+
+  .log-in-form,
+  .sign-up-form {
+    padding: 50px 100px;
+    width: 50%;
+  }
 }
 
 @media (max-width: 640px) {
-
-    .log-in-form,
-    .sign-up-form {
-        padding: 35px;
-        width: 80%;
+  .footer {
+    .icon {
+      width: 40px;
     }
+  }
+
+  .log-in-form,
+  .sign-up-form {
+    padding: 35px;
+    width: 80%;
+  }
 }

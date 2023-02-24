@@ -1,3 +1,18 @@
+.btn {
+  padding: 7px 13px;
+  margin-top: 10px;
+  border-radius: 15px;
+}
+
+input[type=text],
+input[type=password] {
+  border-radius: 15px;
+  padding: 7px 13px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
 .header {
   background-color: #BEE5BF;
   padding: 12px;
@@ -17,6 +32,13 @@
 .footer .col {
   padding: 15px;
 }
+.footer .icon-col {
+  padding: 0;
+}
+.footer .icon {
+  filter: invert(1);
+  padding: 15px 0;
+}
 .footer a {
   color: white;
   text-decoration: none;
@@ -26,13 +48,6 @@
 }
 .footer .title {
   font-size: larger;
-}
-.footer .icon {
-  width: 40px;
-  filter: invert(1);
-}
-.footer .tiktok {
-  width: 42px;
 }
 
 .log-in-form {
@@ -53,8 +68,6 @@
 }
 .log-in-form .btn {
   color: white;
-  padding: 7px 13px;
-  margin-top: 10px;
   width: 100%;
 }
 .log-in-form .btn:hover {
@@ -70,54 +83,48 @@
   color: black;
 }
 .log-in-form .sign-up-btn {
+  margin-top: 45px;
   background-color: #003E1F;
 }
 .log-in-form .google-btn {
   background-color: #DB4437;
-  margin-top: 45px;
 }
 .log-in-form .facebook-btn {
   background-color: #4267B2;
 }
 
-input[type=text],
-input[type=password] {
-  border-radius: 15px;
-  padding: 7px 13px;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  width: 100%;
-}
-
-input[type=checkbox] {
-  width: 20px;
-  height: 20px;
-  border: 2px solid black;
-  border-radius: 5px;
-  transform: translateY(5px);
-  margin-right: 10px;
-  accent-color: #003E1F;
-}
-
-.sign-up-form {
-  padding: 35px;
-}
 .sign-up-form .btn {
   color: black;
   background-color: #BEE5BF !important;
-  padding: 7px 13px;
-  margin-top: 10px;
   width: 100%;
 }
 .sign-up-form .btn:hover {
   color: black;
 }
 
+.index {
+  padding: 30px 0;
+}
+.index h1 {
+  text-align: center;
+}
+.index h2 {
+  text-align: center;
+}
+
+#sign-up-requirements {
+  color: white;
+  transition: color 1s ease;
+}
+
 @media (min-width: 640px) {
-  .logo {
+  .header .logo {
     flex: 0 0 auto;
     width: 70%;
     text-align: left;
+  }
+  .footer .icon {
+    width: 50px;
   }
   .log-in-form,
   .sign-up-form {
@@ -126,6 +133,9 @@ input[type=checkbox] {
   }
 }
 @media (max-width: 640px) {
+  .footer .icon {
+    width: 40px;
+  }
   .log-in-form,
   .sign-up-form {
     padding: 35px;

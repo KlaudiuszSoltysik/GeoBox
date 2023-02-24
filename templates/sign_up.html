@@ -1,4 +1,5 @@
 {% extends 'main.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -7,11 +8,15 @@
     {% csrf_token %}
     <h1>Sign up</h1>
     <label for="email">Email</label><br>
-    <input type="text" placeholder="Enter Email" name="email" required><br>
+    <input type="text" placeholder="Enter email" name="email" id="email-input" required><br>
     <label for="password">Password</label><br>
-    <input type="password" placeholder="Enter Password" name="password" required><br>
+    <input type="password" placeholder="Enter password" name="password" id="password-input" required><br>
+    <label for="nick">Nickname</label><br>
+    <input type="text" placeholder="Enter your nickname" name="nick" required><br>
+    <p id="sign-up-requirements"></p>
     <button type="submit" class="btn log-in-btn">Sign up</button>
   </form>
 </div>
 
+<script src="{% static 'scripts/sign_up.js' %}"></script>
 {% endblock %}
