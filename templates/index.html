@@ -1,10 +1,18 @@
 {% extends 'main.html' %}
+{% load static %}
 
 {% block content %}
 
 <div class="container-md index">
-  <h1>Over hidden boxes!</h1>
-  <h2>Can you find them all?</h2>
+  <h1>Your current location is:</h1>
+  <h2 id="location">Latitude:<br>Longitude</h2>
+
+  <div id="user-location-map"></div>
+
+  <h3>Over hidden boxes!</h3>
+  <h4>Can you find them all?</h4>
 </div>
 
+<script src="{% static 'scripts/index.js' %}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA49f84zs9yPsjhMh5KZn2nreNjBqOJewY&callback=initMap"></script>
 {% endblock %}
