@@ -1,22 +1,16 @@
 from pathlib import Path
+import environ
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+env = environ.Env()
+environ.Env.read_env()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-2t)5fz@v_j%s_7!7@fkp++h+xf01v8+7#oerh$7ktow%h0q8o@'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,8 +19,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pwa',
     'base',
-    'pwa'
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -61,20 +57,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'GeoBox.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -90,10 +78,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
+AUTH_USER_MODEL = "base.CustomUser"
 
 LANGUAGE_CODE = 'en-us'
 
@@ -102,19 +87,11 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PWA_APP_NAME = 'GeoBox'
@@ -146,3 +123,14 @@ PWA_APP_SPLASH_SCREEN = [
 ]
 PWA_APP_DIR = 'ltr'
 PWA_APP_LANG = 'en-US'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  
+MAIL_FROM = 'klaudiusz.s1405@gmail.com'
+EMAIL_HOST_USER = 'klaudiusz.s1405@gmail.com'  
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD_ENV')  
+EMAIL_PORT = 587
+EMAIL_USE_TLD = True
+PASSWORD_RESET_TIMEOUT = 14400

@@ -1,5 +1,5 @@
 var deferredPrompt;
-const installBtn = document.getElementById('install-btn')
+const installBtn = document.getElementById('install-link')
 
 window.addEventListener('beforeinstallprompt', function (event) {
   event.preventDefault();
@@ -22,7 +22,7 @@ if (window.matchMedia('(display-mode: standalone)').matches) {
 }  
 
 const logInForm = document.getElementById('log-in-form');
-const logIn = document.getElementById('log-in-btn');
+const logIn = document.getElementById('log-in-link');
 const closeLogIn = document.getElementById('close-log-in');
 
 logIn.addEventListener('click', () => {
@@ -33,8 +33,12 @@ closeLogIn.addEventListener('click', () => {
   logInForm.style.display = "none";
 });
 
-document.addEventListener('mouseup', function (e) {
+document.addEventListener('mouseup', (e) => {
   if (!logInForm.contains(e.target)) {
     logInForm.style.display = 'none';
   }
+});
+
+document.getElementById('log-in-btn').addEventListener('click', () => {
+    logInForm.style.display = 'none';
 });

@@ -10,3 +10,12 @@ password.addEventListener('input', () => {
 })
 
 document.getElementById('log-in-btn').style.display = 'none';
+
+document.getElementById('show-password').addEventListener('click', () => {
+  var x = document.getElementById('password-input');
+  if (x.type === 'password') {
+    x.type = 'text';
+  } else {
+    x.type = 'password';
+  }
+});

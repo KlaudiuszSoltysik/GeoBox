@@ -1,14 +1,22 @@
 from django.db import models
+from .managers import CustomUserManager
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):   
-    email = models.EmailField(max_length=64)
-    nick = models.CharField(max_length=64)
-    
+class CustomUser(AbstractUser):
+    username = None
+    email = models.EmailField(unique=True)
+    nick = models.CharField('Nickname', max_length=60)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ['nick']
+
+    objects = CustomUserManager()
+
     def __str__(self):
-            return self.email
-        
-class Box(models.Model):   
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+        return self.email
+
+class Box(models.Model):
+    user = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=64)
     lat = models.FloatField()
     lon = models.FloatField()
@@ -18,13 +26,13 @@ class Box(models.Model):
     description = models.CharField(max_length=5000, null=True)
     
     def __str__(self):
-            return self.name
+        return self.name
 
-class Comment(models.Model):   
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Comment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     box = models.ForeignKey(Box, on_delete=models.CASCADE)
     comment = models.CharField(max_length=500)
     timestamp = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-            return self.comment
+        return self.comment

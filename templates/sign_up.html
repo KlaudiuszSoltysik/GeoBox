@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
@@ -7,16 +8,24 @@
   <form method="POST" action="">
     {% csrf_token %}
     <h1>Sign up</h1>
-    <label for="email">Email</label><br>
-    <input type="text" placeholder="Enter email" name="email" id="email-input" required><br>
-    <label for="password">Password</label><br>
-    <input type="password" placeholder="Enter password" name="password" id="password-input" required><br>
-    <label for="nick">Nickname</label><br>
-    <input type="text" placeholder="Enter your nickname" name="nick" required><br>
-    <p id="sign-up-requirements"></p>
+    {{ form.email|as_crispy_field }}  
+    {{ form.password1|as_crispy_field }}
+    <input type="checkbox" id="show-password">Show Password<br>
+    {{ form.nick|as_crispy_field }}
+    <p id="sign-up-requirements">Password too short</p>
     <button type="submit" class="btn log-in-btn">Sign up</button>
+    * required field
   </form>
 </div>
 
 <script src="{% static 'scripts/sign_up.js' %}"></script>
 {% endblock %}
+
+<!-- <label for="email">Email</label><br>
+    <input type="text" placeholder="Enter email" name="email" id="email-input" required><br>
+    <label for="password">Password</label><br>
+    <input type="password" placeholder="Enter password" name="password" id="password-input" required><br>
+    <input type="checkbox" id="show-password">Show Password<br>
+    <label for="nick">Nickname</label><br>
+    <input type="text" placeholder="Enter your nickname" name="nick" required><br>
+    <p id="sign-up-requirements">Password too short</p> -->
