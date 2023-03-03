@@ -8,16 +8,34 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
+from django.conf import settings
 
 from .models import CustomUser, Box, Comment
 from .forms import CustomUserSignUpForm
-from .tokens import AccountActivationTokenGenerator
+from .tokens import AccountActivationTokenGenerator, account_activation_token
 
 user = None
 
+def activate(request, uidb64, token):
+    try:  
+        uid = force_str(urlsafe_base64_decode(uidb64))  
+        user = CustomUser.objects.get(pk=uid)  
+    except:
+        user = None
+        pass
+    if user is not None and account_activation_token.check_token(user, token):  
+        user.is_active = True  
+        user.save()  
+        messages.info(request, 'Thank you for your email confirmation. Now you can login your account.')
+        return redirect('index') 
+    else:  
+        messages.info(request, 'Activation link is invalid!')
+        return redirect('index')
+    
+    
 def activateEmail(request, user, to_email):
     mail_subject = 'Activate your user account.'
-    message = render_to_string('templates/template_activate_account.html', {
+    message = render_to_string(settings.BASE_DIR / 'templates/account_activate_email.html', {
         'user': user.email,
         'domain': get_current_site(request).domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -44,7 +62,7 @@ def index(request):
             
             return redirect('index')
         
-        if len(password)<6:
+        if len(password) < 8:
             messages.add_message(request, messages.INFO, 'Password is too short')
             
             return redirect('index')
@@ -63,14 +81,15 @@ def index(request):
                     
             if(not request.POST.get('remember')):
                 request.session.set_expiry(0)
+                
+            #ZALOGOWANO 
+            print('zalogowano')  
                     
             return redirect('index')
         else:
             messages.add_message(request, messages.INFO, 'Wrong password')
                     
-            return redirect('index') 
-        
-        #ZALOGOWANO         
+            return redirect('index')       
             
     return render(request, 'index.html')
 
@@ -92,15 +111,22 @@ def sign_up(request):
             
             return redirect('sign_up')
              
-        form = CustomUserSignUpForm(request.POST)
+        try:
+            form = CustomUserSignUpForm(request.POST)
         
-        user = form.save(commit=False)
-        user.is_active = False
-        user.save()
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+                
+            activateEmail(request, user, email)
             
-        activateEmail(request, user, email)
+            return redirect('index')
             
-        return redirect('index')
+        except ValidationError:
+            messages.add_message(request, messages.INFO, 'An errror has occured, try again')
+            
+            return redirect('sign_up')
+    
     else:
         form = CustomUserSignUpForm() 
         

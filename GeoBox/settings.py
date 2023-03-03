@@ -127,10 +127,9 @@ PWA_APP_LANG = 'en-US'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  
-MAIL_FROM = 'klaudiusz.s1405@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'klaudiusz.s1405@gmail.com'  
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD_ENV')  
 EMAIL_PORT = 587
-EMAIL_USE_TLD = True
+EMAIL_USE_TLS = True
 PASSWORD_RESET_TIMEOUT = 14400
