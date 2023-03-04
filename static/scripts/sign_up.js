@@ -1,5 +1,5 @@
 const signUpRequirements = document.getElementById('sign-up-requirements');
-const password = document.getElementById('password-input');
+const password = document.getElementsByClassName('passwordinput form-control')[1];
 
 password.addEventListener('input', () => {
   if(password.value.length > 0 && password.value.length < 8) {
@@ -7,12 +7,11 @@ password.addEventListener('input', () => {
   } else {
     signUpRequirements.style.color = "white";
   }
-})
+});
 
-document.getElementById('log-in-btn').style.display = 'none';
+document.getElementById('log-in-link').style.display = 'none';
 
 document.getElementById('show-password').addEventListener('click', () => {
-  var password = document.getElementById('password-input');
   if (password.type === 'password') {
     password.type = 'text';
   } else {

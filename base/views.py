@@ -1,168 +1,188 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.core.validators import validate_email
-from django.forms import ValidationError
-
+from django.contrib.auth import authenticate, login
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
 
 from .models import CustomUser, Box, Comment
-from .forms import CustomUserSignUpForm
+from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm
 from .tokens import AccountActivationTokenGenerator, account_activation_token
 
 user = None
 
-def activate(request, uidb64, token):
-    try:  
-        uid = force_str(urlsafe_base64_decode(uidb64))  
-        user = CustomUser.objects.get(pk=uid)  
-    except:
-        user = None
-        pass
-    if user is not None and account_activation_token.check_token(user, token):  
-        user.is_active = True  
-        user.save()  
-        messages.info(request, 'Thank you for your email confirmation. Now you can login your account.')
-        return redirect('index') 
-    else:  
-        messages.info(request, 'Activation link is invalid!')
-        return redirect('index')
-    
-    
-def activateEmail(request, user, to_email):
-    mail_subject = 'Activate your user account.'
-    message = render_to_string(settings.BASE_DIR / 'templates/account_activate_email.html', {
-        'user': user.email,
-        'domain': get_current_site(request).domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': AccountActivationTokenGenerator().make_token(user),
-        "protocol": 'https' if request.is_secure() else 'http'
-    })
-    
-    email = EmailMessage(mail_subject, message, to=[to_email])
-    
-    if email.send():
-        messages.info(request, f'Check your {to_email} inbox to activate account')
-    else:
-        messages.info(request, f"We couldn't send an email with activation email to {to_email}")
 
 def index(request):
+    log_in_form = CustomUserLogInForm()
+    
+    context = {'log_in_form': log_in_form}   
+     
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        log_in_form = CustomUserLogInForm(request.POST)
         
-        try:
-            validate_email(email)
-        except ValidationError:
-            messages.add_message(request, messages.INFO, f'Email {email} is invalid')
+        if log_in_form.is_valid():
+            email = log_in_form.cleaned_data['email']
+            password = log_in_form.cleaned_data['password1']
             
-            return redirect('index')
-        
-        if len(password) < 8:
-            messages.add_message(request, messages.INFO, 'Password is too short')
-            
-            return redirect('index')
-        
-        
-        try:
-            user = CustomUser.objects.get(email=email)
-        except CustomUser.DoesNotExist:
-            messages.add_message(request, messages.INFO, f"There isn't any account created with email {email}")
-                    
-            return redirect('index')
-            
-
-        if user.check_password(password):
-            messages.add_message(request, messages.INFO, 'Nice to see you again!')
-                    
             if(not request.POST.get('remember')):
                 request.session.set_expiry(0)
-                
-            #ZALOGOWANO 
-            print('zalogowano')  
+            else:
+                request.session.set_expiry(2592000)
                     
-            return redirect('index')
-        else:
-            messages.add_message(request, messages.INFO, 'Wrong password')
-                    
-            return redirect('index')       
+            user = authenticate(username=email, password=password)
             
-    return render(request, 'index.html')
+            if user is not None:
+                login(request, user)
+                messages.add_message(request, messages.INFO, 'Nice to see you again!')  
+            else:
+                messages.add_message(request, messages.INFO, "We couldn't log in account with that data.")  
+                   
+            return redirect('index')  
+        else:
+            messages.add_message(request, messages.INFO, "We couldn't log in account with that data.")
+            return redirect('index') 
+            
+    return render(request, 'index.html', context)
 
 
 def sign_up(request):
+    log_in_form = CustomUserLogInForm()
+    form = CustomUserSignUpForm() 
+    
+    context = {'log_in_form': log_in_form,
+               'form': form} 
+        
     if request.method == "POST":
-        email = request.POST.get('email')
-        password = request.POST.get('password1')
+        form = CustomUserSignUpForm(request.POST)
         
-        try:
-            validate_email(email)
-        except ValidationError:
-            messages.add_message(request, messages.INFO, f'Email {email} is invalid')
-            
-            return redirect('sign_up')
-        
-        if len(password) < 8:
-            messages.add_message(request, messages.INFO, 'Password is too short')
-            
-            return redirect('sign_up')
-             
-        try:
-            form = CustomUserSignUpForm(request.POST)
-        
+        if form.is_valid():                
+            email = form.cleaned_data['email']
             user = form.save(commit=False)
             user.is_active = False
             user.save()
                 
-            activateEmail(request, user, email)
-            
-            return redirect('index')
-            
-        except ValidationError:
-            messages.add_message(request, messages.INFO, 'An errror has occured, try again')
-            
-            return redirect('sign_up')
+            mail_subject = 'Activate your user account.'
+            message = render_to_string(settings.BASE_DIR / 'templates/email/account_activate_email.html', {
+                'user': user.email,
+                'domain': get_current_site(request).domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': AccountActivationTokenGenerator().make_token(user),
+                'protocol': 'https' if request.is_secure() else 'http'})
     
-    else:
-        form = CustomUserSignUpForm() 
-        
-        context = {'form': form} 
+            mail = EmailMessage(mail_subject, message, to=[email])
+                
+            if mail.send():
+                messages.info(request, f'Check your {email} inbox to activate account.')
+            else:
+                messages.info(request, f"We couldn't send an email with activation link to {email}.")
+                
+            return redirect('index')            
+        else:            
+            messages.add_message(request, messages.INFO, "We couldn't create account with that data.")
+            return redirect('sign_up')
     
     return render(request, 'sign_up.html', context)
 
-# def sign_up(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-        
-#         try:
-#             validate_email(email)
-#         except ValidationError:
-#             messages.add_message(request, messages.INFO, f'Email {email} is invalid')
-            
-#             return redirect('sign_up')
-        
-#         if len(password)<6:
-#             messages.add_message(request, messages.INFO, 'Password is too short')
-            
-#             return redirect('sign_up')     
-            
-#         try:                
-#             CustomUser.objects.create_user(email=email,
-#                                        password=password,
-#                                        nick=request.POST.get('nick')) 
-            
-#             messages.add_message(request, messages.INFO, 'You signed up successfully!')
-            
-#             return redirect('index')
-        
-#         except IntegrityError:
-#             messages.add_message(request, messages.INFO, f'User {email} alredy exist, try to log in')
-            
-#             return redirect('sign_up')         
+
+def activate(request, uidb64, token):
+    uid = force_str(urlsafe_base64_decode(uidb64))  
     
-#     return render(request, 'sign_up.html')
+    try:  
+        user = CustomUser.objects.get(pk=uid)  
+    except:
+        user = None
+        
+    if user is not None and account_activation_token.check_token(user, token):  
+        user.is_active = True  
+        user.save() 
+         
+        messages.info(request, 'Thank you for your email confirmation. Now you can login.')
+    else:  
+        messages.info(request, 'Activation link is invalid!')
+        
+    return redirect('index') 
+
+
+def reset_password(request): 
+    log_in_form = CustomUserLogInForm() 
+    form = CustomUserPasswordResetForm()
+    
+    context = {'log_in_form': log_in_form,
+               'form': form}
+    
+    if request.method == "POST":
+        form = CustomUserPasswordResetForm(request.POST)
+        
+        if form.is_valid():
+            email=form.cleaned_data['email']
+            
+            try:
+                user = CustomUser.objects.get(email=email)
+            except:
+                messages.info(request, f"We couldn't send an email to {email}.")  
+                return redirect('reset_password')
+            
+            if user:
+                mail_subject = 'Reset your password.'
+                message = render_to_string(settings.BASE_DIR / 'templates/email/reset_password.html', {
+                    'user': user.email,
+                    'domain': get_current_site(request).domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': default_token_generator.make_token(user),
+                    'protocol': 'https' if request.is_secure() else 'http'})
+                
+                mail = EmailMessage(mail_subject, message, to=[email])
+                
+                if mail.send():
+                    messages.info(request, f'Check your {email} inbox to reset your password.')
+                else:
+                    messages.info(request, f"We couldn't send an email to {email}.")
+                    
+                return redirect('index')
+            
+            else:
+                messages.warning(request, f"User {email} doesn't exist.")
+                return redirect('reset_password_email')     
+    
+    return render(request, 'reset_password_email.html', context)
+ 
+ 
+def set_new_password(request, uidb64, token):
+    log_in_form = CustomUserLogInForm() 
+    form = CustomUserSetPasswordForm()
+    
+    context = {'log_in_form': log_in_form,
+               'form': form}
+    
+    if request.method == "POST":
+        form = CustomUserSetPasswordForm(request.POST)
+        
+        if form.is_valid():
+            uid = force_str(urlsafe_base64_decode(uidb64))  
+    
+            try:  
+                user = CustomUser.objects.get(pk=uid)
+            except:
+                user = None
+                
+            if user is not None and default_token_generator.check_token(user, token):
+                
+                password = form.cleaned_data['password1']
+                
+                if len(password) < 8:
+                    messages.info(request, 'Invalid password.')
+                    return redirect('set_new_password', uidb64=uidb64, token=token) 
+                
+                user.set_password(password)
+                user.save()
+                messages.info(request, 'Password resetted. Now you can login.')
+            else:  
+                messages.info(request, 'Reset link is invalid!')
+            
+            return redirect('index')     
+    
+    return render(request, 'reset_password_password.html', context)

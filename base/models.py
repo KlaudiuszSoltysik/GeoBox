@@ -14,6 +14,7 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+    
 
 class Box(models.Model):
     user = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL)

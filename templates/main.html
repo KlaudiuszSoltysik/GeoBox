@@ -1,5 +1,6 @@
 {% load static %}
 {% load pwa %}
+{% load crispy_forms_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -52,13 +53,11 @@
     <form method="POST" action="">
       {% csrf_token %}
       <h1>Log in</h1>
-      <label for="email">Email</label><br>
-      <input type="text" placeholder="Enter email" name="email" required><br>
-      <label for="password">Password</label><br>
-      <input type="password" placeholder="Enter password" name="password" required><br>
+      {{ log_in_form.email|as_crispy_field }}
+      {{ log_in_form.password1|as_crispy_field }}
       <input type="checkbox" name="remember">Remember me<br>
       <button type="submit" class="btn log-in-btn" id="log-in-btn">Log in</button>
-      <p>Forgot password? <a href="#">Reset</a></p>
+      <p>Forgot password? <a href="{% url 'reset_password' %}">Reset</a></p>
     </form>
     <a href="{% url 'sign_up' %}" class="btn sign-up-btn">Sign up</a>
   </div>

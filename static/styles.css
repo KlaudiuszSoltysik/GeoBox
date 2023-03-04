@@ -21,7 +21,7 @@ input[type=checkbox] {
 }
 
 .alert-info {
-  animation: fadeOut 5s forwards;
+  animation: fadeOut 10s forwards;
 }
 
 @keyframes fadeOut {
@@ -78,6 +78,9 @@ input[type=checkbox] {
   z-index: 1;
   background-color: white;
   box-shadow: 0 0 5px black;
+}
+.log-in-form .asteriskField {
+  display: none;
 }
 .log-in-form .btn-close {
   position: fixed;
