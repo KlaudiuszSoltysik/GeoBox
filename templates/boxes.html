@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid text-center header">
+  <div class="row">
+    {% if user %}
+    <div class="col">
+      <a href="{% url 'add_box' %}">Add box</a>
+    </div>
+    {% else %}
+    <div class="col">
+      <a class="log-in-link">Add box</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% for box in boxes %}
+{{ box.name }}
+{% endfor %}
+
+<script src="{% static 'scripts/boxes.js' %}"></script>
+{% endblock %}

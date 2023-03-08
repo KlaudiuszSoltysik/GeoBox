@@ -1,10 +1,8 @@
 bez logowania:
 -wyszukiwanie skrzynek po współrzędnych obecnych/współrzędnych miasta
 -sortowanie wg odległości/losowe/trudności
--allauth
 
 po zalogowaniu:
-checkbox zapamiętaj mnie
 dodawanie skrzynek id | id autora | nazwa | (dł | szer) / auto lokalizacja | zdjęcie | (zdjęcie2) | trudność | opis
 dodawanie komentarzy id | id skrzynki | id autora | timestamp | komentarz
 

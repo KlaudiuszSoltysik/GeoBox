@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="form-group sign-up-form container-fluid">
+    <form method="POST" action="">
+      {% csrf_token %}
+      <h1>Add box</h1>
+      <div class="row">
+        {{ form.name|as_crispy_field }}
+        {{ form.lat|as_crispy_field }}{{ form.lon|as_crispy_field }}
+        <a id="find-me-btn" class="btn sign-up-btn">Find me</a>
+        {{ form.img1|as_crispy_field }}{{ form.img2|as_crispy_field }}
+        {{ form.difficulty|as_crispy_field }}
+        {{ form.description|as_crispy_field }}
+      </div>
+      <button type="submit" class="btn log-in-btn">Add</button>
+    </form>
+  </div>
+
+<script src="{% static 'scripts/add_box.js' %}"></script>
+{% endblock %}

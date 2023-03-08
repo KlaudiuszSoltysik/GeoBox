@@ -1,17 +1,7 @@
 .btn {
   padding: 7px 13px;
   margin-top: 10px;
-  border-radius: 15px;
-}
-
-input[type=text],
-input[type=password],
-input[type=email] {
-  border-radius: 15px;
-  padding: 7px 13px;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  width: 100%;
+  border-radius: 5px;
 }
 
 input[type=checkbox] {
@@ -21,7 +11,8 @@ input[type=checkbox] {
 }
 
 .alert-info {
-  animation: fadeOut 10s forwards;
+  animation: fadeOut 15s forwards;
+  margin: 0;
 }
 
 @keyframes fadeOut {
@@ -41,6 +32,8 @@ input[type=checkbox] {
 }
 .header a {
   font-size: 22px;
+  color: black;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -115,6 +108,9 @@ input[type=checkbox] {
   color: black;
 }
 
+.sign-up-form .asteriskField {
+  display: none;
+}
 .sign-up-form .btn {
   color: black;
   background-color: #BEE5BF !important;
@@ -127,7 +123,10 @@ input[type=checkbox] {
 .index {
   padding: 30px 0;
 }
-.index h1, .index h2, .index h3, .index h4 {
+.index h1,
+.index h2,
+.index h3,
+.index h4 {
   text-align: center;
 }
 .index h2 {
@@ -140,13 +139,15 @@ input[type=checkbox] {
   width: 100%;
   height: 500px;
 }
-.index .lds-ring {
+
+.lds-ring {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
 }
-.index .lds-ring div {
+
+.lds-ring div {
   box-sizing: border-box;
   display: block;
   position: absolute;
@@ -158,15 +159,19 @@ input[type=checkbox] {
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: black transparent transparent transparent;
 }
-.index .lds-ring div:nth-child(1) {
+
+.lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
 }
-.index .lds-ring div:nth-child(2) {
+
+.lds-ring div:nth-child(2) {
   animation-delay: -0.3s;
 }
-.index .lds-ring div:nth-child(3) {
+
+.lds-ring div:nth-child(3) {
   animation-delay: -0.15s;
 }
+
 @keyframes lds-ring {
   0% {
     transform: rotate(0deg);
@@ -175,10 +180,21 @@ input[type=checkbox] {
     transform: rotate(360deg);
   }
 }
-
 #sign-up-requirements {
   color: white;
   transition: color 1s ease;
+}
+
+#div_id_lat,
+#div_id_lon,
+#div_id_img1,
+#div_id_img2 {
+  width: 50%;
+}
+
+#find-me-btn {
+  margin: 0 12px 40px 12px;
+  width: calc(100% - 24px);
 }
 
 @media (min-width: 640px) {
@@ -197,6 +213,9 @@ input[type=checkbox] {
   }
 }
 @media (max-width: 640px) {
+  .header #logo {
+    display: none;
+  }
   .footer .icon {
     width: 40px;
   }

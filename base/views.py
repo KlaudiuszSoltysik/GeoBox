@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -8,18 +8,51 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.decorators import login_required
 
 from .models import CustomUser, Box, Comment
-from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm
+from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm, AddBoxForm
 from .tokens import AccountActivationTokenGenerator, account_activation_token
 
 user = None
 
+def log_in(request):
+    global user
+    
+    if request.method == 'POST':
+        log_in_form = CustomUserLogInForm(request.POST)
+        
+        if log_in_form.is_valid():
+            email = log_in_form.cleaned_data['email']
+            password = log_in_form.cleaned_data['password1']
+            
+            if(not request.POST.get('remember')):
+                request.session.set_expiry(0)
+            else:
+                request.session.set_expiry(2592000)
+                    
+            user = authenticate(username=email, password=password)
+            
+            if user is not None:
+                login(request, user)
+                
+                messages.add_message(request, messages.INFO, 'Nice to see you again!')  
+            else:
+                messages.add_message(request, messages.INFO, "We couldn't log in account with that data.")  
+                   
+            return redirect('index')  
+        else:
+            messages.add_message(request, messages.INFO, "We couldn't log in account with that data.")
+            return redirect('index') 
+
 
 def index(request):
+    global user
+    
     log_in_form = CustomUserLogInForm()
     
-    context = {'log_in_form': log_in_form}   
+    context = {'log_in_form': log_in_form,
+               'user': user}   
      
     if request.method == 'POST':
         log_in_form = CustomUserLogInForm(request.POST)
@@ -37,6 +70,7 @@ def index(request):
             
             if user is not None:
                 login(request, user)
+                
                 messages.add_message(request, messages.INFO, 'Nice to see you again!')  
             else:
                 messages.add_message(request, messages.INFO, "We couldn't log in account with that data.")  
@@ -45,17 +79,18 @@ def index(request):
         else:
             messages.add_message(request, messages.INFO, "We couldn't log in account with that data.")
             return redirect('index') 
+
             
     return render(request, 'index.html', context)
 
 
-def sign_up(request):
+def sign_up(request):   
     log_in_form = CustomUserLogInForm()
     form = CustomUserSignUpForm() 
     
     context = {'log_in_form': log_in_form,
                'form': form} 
-        
+    
     if request.method == "POST":
         form = CustomUserSignUpForm(request.POST)
         
@@ -107,7 +142,7 @@ def activate(request, uidb64, token):
     return redirect('index') 
 
 
-def reset_password(request): 
+def reset_password(request):   
     log_in_form = CustomUserLogInForm() 
     form = CustomUserPasswordResetForm()
     
@@ -186,3 +221,49 @@ def set_new_password(request, uidb64, token):
             return redirect('index')     
     
     return render(request, 'reset_password_password.html', context)
+
+
+def log_out(request):
+    global user
+    logout(request)
+    user = None
+    messages.add_message(request, messages.INFO, "Now you're logged out.")
+    return redirect('index')
+
+
+def boxes(request):
+    global user
+    
+    log_in_form = CustomUserLogInForm()
+    
+    boxes = Box.objects.all()
+    
+    log_in(request)
+    
+    context = {'log_in_form': log_in_form,
+               'user': user,
+               'boxes': boxes} 
+    
+    return render(request, 'boxes.html', context)
+
+
+@login_required
+def add_box(request):
+    global user
+    
+    log_in_form = CustomUserLogInForm()
+    form = AddBoxForm()
+    
+    if form.is_valid():
+        try:
+            form.save()
+            messages.add_message(request, messages.INFO, 'Box added.')
+            return redirect('boxes')
+        except:
+            messages.add_message(request, messages.INFO, 'Something went wrong.')
+    
+    context = {'log_in_form': log_in_form,
+               'user': user,
+               'form': form} 
+    
+    return render(request, 'add_box.html', context)

@@ -17,20 +17,23 @@ installBtn.addEventListener('click', (e) => {
     });
 });
 
-if (window.matchMedia('(display-mode: standalone)').matches) {  
-    installBtn.style.display='none'
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  document.getElementById('install-link').remove()
 }  
 
 const logInForm = document.getElementById('log-in-form');
-const logIn = document.getElementById('log-in-link');
+var logIn = document.getElementsByClassName('log-in-link');
 const closeLogIn = document.getElementById('close-log-in');
 
-logIn.addEventListener('click', () => {
-  logInForm.style.display = "block";
-});
+
+for (const element of logIn) {
+  element.addEventListener('click', () => {
+    logInForm.style.display = 'block';
+  })
+}
 
 closeLogIn.addEventListener('click', () => {
-  logInForm.style.display = "none";
+  logInForm.style.display = 'none';
 });
 
 document.addEventListener('mouseup', (e) => {

@@ -25,16 +25,24 @@
     <div class="row">
       <div class="col logo">
         <a class="navbar-brand" href="{% url 'index' %}">
-          <img src="static/images/box-160x160.png" id="logo">
+          <img src="{% static 'images/box-160x160.png' %}" id="logo">
           GeoBox
         </a>
-      </div>
-      <div class="col">
+      </div><div class="col install-col">
         <a id="install-link">Install</a>
       </div>
       <div class="col">
-        <a id="log-in-link">Log in</a>
+        <a href="{% url 'boxes' %}">Boxes</a>
       </div>
+      {% if user %}
+        <div class="col">
+          <a href="{% url 'log_out' %}">Log out</a>
+        </div>
+      {% else %}
+        <div class="col">
+          <a class="log-in-link" id="log-in-link">Log in</a>
+        </div>
+      {% endif %}
     </div>
   </div>
 
@@ -80,15 +88,15 @@
         <div class="container-fluid text-center">
           <div class="row">
             <div class="col icon-col">
-              <a href="https://www.instagram.com/" target="_blank"><img src="static/images/instagram-icon.png"
+              <a href="https://www.instagram.com/" target="_blank"><img src="{% static 'images/instagram-icon.png' %}"
                   class="icon"></a>
             </div>
             <div class="col icon-col">
-              <a href="https://www.tiktok.com/en" target="_blank"><img src="static/images/tiktok-icon.png"
+              <a href="https://www.tiktok.com/en" target="_blank"><img src="{% static 'images/tiktok-icon.png' %}"
                   class="icon"></a>
             </div>
             <div class="col icon-col">
-              <a href="https://www.facebook.com/" target="_blank"><img src="static/images/facebook-icon.png"
+              <a href="https://www.facebook.com/" target="_blank"><img src="{% static 'images/facebook-icon.png' %}"
                   class="icon"></a>
             </div>
           </div>
