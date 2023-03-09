@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="form-group sign-up-form container-fluid">
-    <form method="POST" action="">
+    <form method="POST" action="{% url 'add_box' %}" enctype="multipart/form-data">
       {% csrf_token %}
       <h1>Add box</h1>
       <div class="row">
@@ -15,6 +15,7 @@
         {{ form.img1|as_crispy_field }}{{ form.img2|as_crispy_field }}
         {{ form.difficulty|as_crispy_field }}
         {{ form.description|as_crispy_field }}
+        <p id="length-counter">5000/5000</p>
       </div>
       <button type="submit" class="btn log-in-btn">Add</button>
     </form>

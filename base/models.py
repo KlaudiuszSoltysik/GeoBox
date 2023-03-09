@@ -2,6 +2,7 @@ from django.db import models
 from .managers import CustomUserManager
 from django.contrib.auth.models import AbstractUser
 
+
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
@@ -21,7 +22,7 @@ class Box(models.Model):
     name = models.CharField(max_length=64)
     lat = models.FloatField()
     lon = models.FloatField()
-    img1 = models.FileField(upload_to='static/images/user_images')
+    img1 = models.FileField(upload_to='static/images/user_images', blank=True, null=True)
     img2 = models.FileField(upload_to='static/images/user_images', blank=True, null=True)
     difficulty = models.IntegerField()
     description = models.CharField(max_length=5000, blank=True, null=True)

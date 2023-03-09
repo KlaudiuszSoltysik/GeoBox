@@ -6,8 +6,8 @@ var refreshLocation = window.setInterval(() => {
 }, 5000);
 
 function success(position) {
-    var lat = Math.round(position.coords.latitude * 1000000) / 1000000;
-    var lon = Math.round(position.coords.longitude * 1000000) / 1000000;
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
 
     document.getElementById('location').innerHTML = `Latitude: ${lat}<br>Longitude: ${lon}<br>Accuracy: ${Math.round(position.coords.accuracy)}m`;
 
@@ -31,8 +31,8 @@ function initMap() {
     });
 
     navigator.geolocation.getCurrentPosition((position) => {
-        var lat = Math.round(position.coords.latitude * 1000000) / 1000000;
-        var lon = Math.round(position.coords.longitude * 1000000) / 1000000;
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
     
         document.getElementById('location').innerHTML = `Latitude: ${lat}<br>Longitude: ${lon}<br>Accuracy: ${Math.round(position.coords.accuracy)}m`;
     

@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 {% load static %}
+{% load templatetags %}
 
 {% block content %}
 <div class="container-fluid text-center header">
@@ -17,7 +18,24 @@
 </div>
 
 {% for box in boxes %}
-{{ box.name }}
+<div class="container-lg box-container" style="background-image: url('{{ box.img1 }}');">
+  <div class="row">
+    <div class="col-6">
+      <h1>{{ box.name }}</h1>
+      <h2>
+        {{ box.difficulty|stars }}
+      </h2>
+      <div class="compas">
+        <h3>N</h3>
+      </div>
+      <canvas id="c" width="200" height="200"></canvas>
+      <h2 data-lat="{{ box.lat }}" data-lon="{{ box.lon }}" class="position"></h2>
+    </div>
+    <div class="col-6">
+      <h2>{{ box.description }}</h2>
+    </div>
+  </div>
+</div>
 {% endfor %}
 
 <script src="{% static 'scripts/boxes.js' %}"></script>

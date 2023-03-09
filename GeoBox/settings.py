@@ -94,6 +94,8 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_URL = ''
+MEDIA_URL = ''
+MEDIA_ROOT = ''
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PWA_APP_NAME = 'GeoBox'

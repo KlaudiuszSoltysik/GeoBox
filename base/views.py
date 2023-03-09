@@ -254,16 +254,20 @@ def add_box(request):
     log_in_form = CustomUserLogInForm()
     form = AddBoxForm()
     
-    if form.is_valid():
-        try:
-            form.save()
-            messages.add_message(request, messages.INFO, 'Box added.')
-            return redirect('boxes')
-        except:
-            messages.add_message(request, messages.INFO, 'Something went wrong.')
-    
+    if request.method == "POST":
+        form = AddBoxForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            try:
+                form.instance.user = user
+                form.save()
+                messages.add_message(request, messages.INFO, 'Box added.')
+                return redirect('boxes')
+            except:
+                messages.add_message(request, messages.INFO, 'Something went wrong.')
+        
     context = {'log_in_form': log_in_form,
                'user': user,
-               'form': form} 
+               'form': form}
     
     return render(request, 'add_box.html', context)

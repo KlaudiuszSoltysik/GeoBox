@@ -226,6 +226,17 @@ input[type=checkbox] {
   width: calc(100% - 24px);
 }
 
+.box-container {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+.compas {
+  width: 200px;
+  text-align: center;
+}
+
 @media (min-width: 640px) {
   .header {
     .logo {

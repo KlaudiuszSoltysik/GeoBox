@@ -5,8 +5,8 @@ findMeBtn.addEventListener('click', () => {
 });
 
 function success(position) {
-    var lat = Math.round(position.coords.latitude * 1000000) / 1000000;
-    var lon = Math.round(position.coords.longitude * 1000000) / 1000000;
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
 
     document.getElementById('id_lat').value = lat;
     document.getElementById('id_lon').value = lon;
@@ -15,3 +15,7 @@ function success(position) {
 function error(msg) {
     findMeBtn.innerHTML = msg;
 }
+
+document.getElementById('id_description').addEventListener("input", function (event) {
+    document.getElementById('length-counter').textContent = 5000 - this.value.length + "/5000";
+});
