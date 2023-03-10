@@ -14,6 +14,9 @@ from .models import CustomUser, Box, Comment
 from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm, AddBoxForm
 from .tokens import AccountActivationTokenGenerator, account_activation_token
 
+import geocoder
+import numpy as np
+
 user = None
 
 def log_in(request):
@@ -234,17 +237,41 @@ def log_out(request):
 def boxes(request):
     global user
     
+    location = geocoder.ip('me')
+    userLat = location.latlng[0]
+    userLon = location.latlng[1]
+    
     log_in_form = CustomUserLogInForm()
     
     boxes = Box.objects.all()
+    
+    boxesList = []
+    
+    for box in boxes:
+        boxesList.append({'box': box,
+                          'distance': getDistanceFromLatLonInKm(box.lat, box.lon, userLat, userLon)})
     
     log_in(request)
     
     context = {'log_in_form': log_in_form,
                'user': user,
-               'boxes': boxes} 
+               'boxesList': boxesList} 
     
     return render(request, 'boxes.html', context)
+
+
+def getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2):
+    R = 6371
+    dLat = deg2rad(lat2-lat1)
+    dLon = deg2rad(lon2-lon1) 
+    a = np.sin(dLat/2) * np.sin(dLat/2) + np.cos(deg2rad(lat1)) * np.cos(deg2rad(lat2)) * np.sin(dLon/2) * np.sin(dLon/2); 
+    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1-a))
+    d = R * c * 1000
+    return round(d)
+  
+  
+def deg2rad(deg):
+    return deg * (np.pi/180)
 
 
 @login_required

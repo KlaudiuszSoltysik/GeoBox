@@ -227,9 +227,21 @@ input[type=checkbox] {
 }
 
 .box-container {
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
+  padding: 10px;
+
+  .row {
+    margin: 0;
+  }
+
+  .col-1 {
+    width: 225px;
+  }
+
+  .col-2 {
+    width: calc(100% - 225px);
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+  }
 }
 
 .compas {

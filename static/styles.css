@@ -198,9 +198,18 @@ input[type=checkbox] {
 }
 
 .box-container {
+  padding: 10px;
+}
+.box-container .row {
+  margin: 0;
+}
+.box-container .col-1 {
+  width: 225px;
+}
+.box-container .col-2 {
+  width: calc(100% - 225px);
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
+  background-size: auto 100%;
 }
 
 .compas {
