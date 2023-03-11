@@ -12,14 +12,10 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 
 from .models import CustomUser, Box, Comment
-from .forms import (
-    CustomUserSignUpForm,
-    CustomUserLogInForm,
-    CustomUserPasswordResetForm,
-    CustomUserSetPasswordForm,
-    AddBoxForm,
-)
+from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm, AddBoxForm, FilterForm
 from .tokens import AccountActivationTokenGenerator, account_activation_token
+
+import pandas as pd
 
 user = None
 
@@ -51,11 +47,6 @@ def log_in(request):
                 )
 
             return redirect("index")
-        else:
-            messages.add_message(
-                request, messages.INFO, "We couldn't log in account with that data."
-            )
-            return redirect("index")
 
 
 def index(request):
@@ -63,7 +54,8 @@ def index(request):
 
     log_in_form = CustomUserLogInForm()
 
-    context = {"log_in_form": log_in_form, "user": user}
+    context = {"log_in_form": log_in_form, 
+               "user": user}
 
     if request.method == "POST":
         log_in_form = CustomUserLogInForm(request.POST)
@@ -102,7 +94,8 @@ def sign_up(request):
     log_in_form = CustomUserLogInForm()
     form = CustomUserSignUpForm()
 
-    context = {"log_in_form": log_in_form, "form": form}
+    context = {"log_in_form": log_in_form, 
+               "form": form}
 
     if request.method == "POST":
         form = CustomUserSignUpForm(request.POST)
@@ -136,11 +129,6 @@ def sign_up(request):
                 )
 
             return redirect("index")
-        else:
-            messages.add_message(
-                request, messages.INFO, "We couldn't create account with that data."
-            )
-            return redirect("sign_up")
 
     return render(request, "sign_up.html", context)
 
@@ -170,7 +158,8 @@ def reset_password(request):
     log_in_form = CustomUserLogInForm()
     form = CustomUserPasswordResetForm()
 
-    context = {"log_in_form": log_in_form, "form": form}
+    context = {"log_in_form": log_in_form, 
+               "form": form}
 
     if request.method == "POST":
         form = CustomUserPasswordResetForm(request.POST)
@@ -219,7 +208,8 @@ def set_new_password(request, uidb64, token):
     log_in_form = CustomUserLogInForm()
     form = CustomUserSetPasswordForm()
 
-    context = {"log_in_form": log_in_form, "form": form}
+    context = {"log_in_form": log_in_form, 
+               "form": form}
 
     if request.method == "POST":
         form = CustomUserSetPasswordForm(request.POST)
@@ -261,8 +251,12 @@ def log_out(request):
 
 def boxes(request):
     global user
+    
+    cities = pd.read_csv(settings.BASE_DIR / "static/all_cities.csv", sep=";", encoding="latin-1")
+    print(cities)
 
     log_in_form = CustomUserLogInForm()
+    filter_form = FilterForm()
 
     boxes = Box.objects.all()
 
@@ -287,9 +281,16 @@ def boxes(request):
         page_numbers.append(boxes.paginator.num_pages)
 
     log_in(request)
+    
+    if request.method == "POST":
+        form = FilterForm(request.POST)
 
+        if form.is_valid():
+            print(form.cleaned_data['city'])
+        
     context = {
         "log_in_form": log_in_form,
+        "filter_form": filter_form,
         "user": user,
         "boxes": boxes,
         "page_numbers": page_numbers,
@@ -317,6 +318,8 @@ def add_box(request):
             except:
                 messages.add_message(request, messages.INFO, "Something went wrong.")
 
-    context = {"log_in_form": log_in_form, "user": user, "form": form}
+    context = {"log_in_form": log_in_form, 
+               "user": user, 
+               "form": form}
 
     return render(request, "add_box.html", context)

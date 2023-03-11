@@ -64,3 +64,8 @@ class AddBoxForm(forms.ModelForm):
     class Meta:
         model = Box
         fields = ('name', 'lat', 'lon', 'img1', 'img2', 'difficulty', 'description')
+        
+
+class FilterForm(forms.Form):
+    city = forms.CharField(label='City', widget=forms.TextInput(attrs={'placeholder': 'City'}))
+    radius = forms.IntegerField(label='Radius', widget=forms.NumberInput(attrs={'placeholder': 'Radius'}))

@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% load templatetags %}
 
 {% block content %}
@@ -15,6 +16,15 @@
     </div>
     {% endif %}
   </div>
+</div>
+
+<div class="form-group sign-up-form container-fluid">
+  <form method="POST" action="">
+    {% csrf_token %}
+      {{ filter_form.city|as_crispy_field }}
+      {{ filter_form.radius|as_crispy_field }}
+    <button type="submit" class="btn log-in-btn">Filter</button>
+  </form>
 </div>
 
 {% for box in boxes %}

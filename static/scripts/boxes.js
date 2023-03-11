@@ -59,3 +59,9 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 function deg2rad(deg) {
     return deg * (Math.PI / 180);
 }
+
+cityField = document.getElementById('id_city');
+
+cityField.addEventListener("input", () => {
+    
+});
