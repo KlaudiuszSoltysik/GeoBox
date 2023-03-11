@@ -1,7 +1,10 @@
 var findMeBtn = document.getElementById('find-me-btn');
 
 findMeBtn.addEventListener('click', () => {
-    navigator.geolocation.getCurrentPosition(success, error, { timeout: 30000, enableHighAccuracy: true });
+    navigator.geolocation.getCurrentPosition(success, error, {
+        timeout: 30000,
+        enableHighAccuracy: true
+    });
 });
 
 function success(position) {
@@ -16,6 +19,6 @@ function error(msg) {
     findMeBtn.innerHTML = msg;
 }
 
-document.getElementById('id_description').addEventListener("input", function (event) {
+document.getElementById('id_description').addEventListener("input", function(event) {
     document.getElementById('length-counter').textContent = 5000 - this.value.length + "/5000";
 });

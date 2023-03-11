@@ -17,23 +17,48 @@
   </div>
 </div>
 
-{% for box in boxesList %}
+{% for box in boxes %}
 <div class="container-lg box-container">
-  <div class="row">
-    <div class="col-1" style="background-color: {{ box.box.img1|getDominantColor }}">
+  <div class="row" style="background-color: {{ box.img1|getDominantColor }}">
+    <div class="col-1">
       <div class="compas">
-        <h3>N</h3> 
+        <h3>N</h3>
       </div>
-      <canvas id="c" width="200" height="200"></canvas>
+      <canvas width="200" height="200"></canvas>
     </div>
-    <div class="col-2" style="background-image: url('{{ box.box.img1 }}'); background-color: {{ box.box.img1|getDominantColor }}">
-      <h1>{{ box.box.name }}</h1>
-      <h2 data-lat="{{ box.box.lat }}" data-lon="{{ box.box.lon }}" class="position">{{ box.distance }} m</h2>
-      <h2>{{ box.box.difficulty|stars }}</h2>
+    <div class="col-2" style="background-image: url('{{ box.img1 }}')">
+      <h1>{{ box.name }}</h1>
+      <h2 data-lat="{{ box.lat }}" data-lon="{{ box.lon }}" class="position"></h2>
+      <h2>{{ box.difficulty|stars }}</h2>
+      <h2>{{ box.user }}</h2>
     </div>
   </div>
 </div>
 {% endfor %}
+
+<ul class="pagination justify-content-center">
+  {% if boxes.has_previous %}
+  <li class="page-item"><a class="page-link" href="?page=1" style="color: #406d96;">&laquo First</a></li>
+  <li class="page-item"><a class="page-link" href="?page={{ offers.previous_page_number }}"
+      style="color: #406d96;">Previous</a></li>
+  {% endif %}
+  {% for i in page_numbers %}
+  {% if boxes.number == i %}
+  <li class="page-item"><a class="page-link" href="?page={{ i }}" style="color: #e2474b;">{{ i }}</a></li>
+  {% elif i == '...' %}
+  <li class="page-item"><a class="page-link" style="color: #406d96;">{{ i }}</a></li>
+  {% else %}
+  <li class="page-item"><a class="page-link" href="?page={{ i }}" style="color: #406d96;">{{ i }}</a></li>
+  {% endif %}
+  {% endfor %}
+  {% if boxes.has_next %}
+  <li class="page-item"><a class="page-link" href="?page={{ offers.next_page_number }}" style="color: #406d96;">Next</a>
+  </li>
+  <li class="page-item"><a class="page-link" href="?page={{ offers.paginator.num_pages }}" style="color: #406d96;">Last
+      &raquo</a>
+  </li>
+  {% endif %}
+</ul>
 
 <script src="{% static 'scripts/boxes.js' %}"></script>
 {% endblock %}

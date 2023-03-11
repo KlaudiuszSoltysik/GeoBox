@@ -11,6 +11,10 @@ An user can:
 - check his coordinates and position on the map (location and map are refreshed automatically)       
 - if he uses a browser he can download PWA    
 - navigate on the website and use links to other websites   
+- browse all boxes (pagination) (box card contains distance meter and compas to every box made using geolocation in JS)
+- search for nerby boxes (user provide city and radius)
 Additionally, a logged in user can:
+- log out
+- add boxes (find me button automatically complete latitude and longitude inputs)
 ## Presentation
 Video-presentation link:

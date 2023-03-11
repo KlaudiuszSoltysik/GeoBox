@@ -2,7 +2,7 @@ var map;
 var marker;
 
 var refreshLocation = window.setInterval(() => {
-    navigator.geolocation.getCurrentPosition(success, error, { timeout: 30000, enableHighAccuracy: true })
+    navigator.geolocation.getCurrentPosition(success, error)
 }, 5000);
 
 function success(position) {
@@ -33,15 +33,18 @@ function initMap() {
     navigator.geolocation.getCurrentPosition((position) => {
         var lat = position.coords.latitude;
         var lon = position.coords.longitude;
-    
+
         document.getElementById('location').innerHTML = `Latitude: ${lat}<br>Longitude: ${lon}<br>Accuracy: ${Math.round(position.coords.accuracy)}m`;
-    
+
         var location = new google.maps.LatLng(lat, lon);
 
         marker.setPosition(location);
         map.setCenter(location)
         map.setZoom(18)
-    }, error, { timeout: 30000, enableHighAccuracy: true });
+    }, error, {
+        timeout: 30000,
+        enableHighAccuracy: true
+    });
 }
 
 function updateMap(lat, lon) {

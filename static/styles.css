@@ -24,7 +24,7 @@ input[type=checkbox] {
   }
 }
 .header {
-  background-color: #BEE5BF;
+  background-color: #bee5bf;
   padding: 12px;
 }
 .header #logo {
@@ -38,7 +38,7 @@ input[type=checkbox] {
 }
 
 .footer {
-  background-color: #6F5E53;
+  background-color: #6f5e53;
   color: white;
 }
 .footer .col {
@@ -90,7 +90,7 @@ input[type=checkbox] {
 }
 .log-in-form .log-in-btn {
   color: black;
-  background-color: #BEE5BF;
+  background-color: #bee5bf;
   padding: 7px 13px;
   margin-top: 10px;
 }
@@ -99,7 +99,7 @@ input[type=checkbox] {
 }
 .log-in-form .sign-up-btn {
   margin-top: 20px;
-  background-color: #003E1F;
+  background-color: #003e1f;
 }
 .log-in-form p {
   margin-top: 20px;
@@ -113,7 +113,7 @@ input[type=checkbox] {
 }
 .sign-up-form .btn {
   color: black;
-  background-color: #BEE5BF !important;
+  background-color: #bee5bf !important;
   width: 100%;
 }
 .sign-up-form .btn:hover {
@@ -201,7 +201,9 @@ input[type=checkbox] {
   padding: 10px;
 }
 .box-container .row {
+  padding: 20px;
   margin: 0;
+  border-radius: 20px;
 }
 .box-container .col-1 {
   width: 225px;
@@ -210,6 +212,7 @@ input[type=checkbox] {
   width: calc(100% - 225px);
   background-repeat: no-repeat;
   background-size: auto 100%;
+  background-position: center;
 }
 
 .compas {
@@ -243,5 +246,12 @@ input[type=checkbox] {
   .sign-up-form {
     padding: 35px;
     width: 80%;
+  }
+  .box-container .col-1 {
+    margin: 0 auto;
+  }
+  .box-container .col-2 {
+    width: 100%;
+    background-image: none !important;
   }
 }/*# sourceMappingURL=styles.css.map */

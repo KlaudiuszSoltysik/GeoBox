@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 
 static/images/user_images/
+GeoBox.txt
