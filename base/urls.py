@@ -11,5 +11,6 @@ urlpatterns = [
     path('reset-password', views.reset_password, name='reset_password'),
     path('log-out', views.log_out, name='log_out'),
     path('boxes', views.boxes, name='boxes'),
-    path('add_box', views.add_box, name='add_box'),
+    path('add-box', views.add_box, name='add_box'),
+    path('get-suggestions/<str:input>', views.get_suggestions, name='get_suggestions'),
 ]

@@ -58,7 +58,7 @@
   <!-- LOG IN FORM -->
   <div class="form-group log-in-form" id="log-in-form">
     <button type="button" class="btn-close" id="close-log-in" aria-label="Close"></button>
-    <form method="POST" action="">
+    <form autocomplete="off" method="POST" action="">
       {% csrf_token %}
       <h1>Log in</h1>
       {{ log_in_form.email|as_crispy_field }}

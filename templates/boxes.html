@@ -19,7 +19,7 @@
 </div>
 
 <div class="form-group sign-up-form container-fluid">
-  <form method="POST" action="">
+  <form autocomplete="off" method="POST" action="">
     {% csrf_token %}
       {{ filter_form.city|as_crispy_field }}
       {{ filter_form.radius|as_crispy_field }}

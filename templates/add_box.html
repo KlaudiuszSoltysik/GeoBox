@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="form-group sign-up-form container-fluid">
-    <form method="POST" action="{% url 'add_box' %}" enctype="multipart/form-data">
+    <form autocomplete="off" method="POST" action="{% url 'add_box' %}" enctype="multipart/form-data">
       {% csrf_token %}
       <h1>Add box</h1>
       <div class="row">

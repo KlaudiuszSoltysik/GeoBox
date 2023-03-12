@@ -9,17 +9,17 @@ function success(position) {
     var lat = position.coords.latitude;
     var lon = position.coords.longitude;
 
-    document.getElementById('location').innerHTML = `Latitude: ${lat}<br>Longitude: ${lon}<br>Accuracy: ${Math.round(position.coords.accuracy)}m`;
+    document.getElementById("location").innerHTML = `Latitude: ${lat}<br>Longitude: ${lon}<br>Accuracy: ${Math.round(position.coords.accuracy)}m`;
 
     updateMap(lat, lon);
 }
 
 function error(msg) {
-    document.getElementById('location').innerHTML = msg;
+    document.getElementById("location").innerHTML = msg;
 }
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('user-location-map'), {
+    map = new google.maps.Map(document.getElementById("user-location-map"), {
         zoom: 6,
         center: new google.maps.LatLng(52, 21),
         disableDefaultUI: true,
@@ -34,7 +34,7 @@ function initMap() {
         var lat = position.coords.latitude;
         var lon = position.coords.longitude;
 
-        document.getElementById('location').innerHTML = `Latitude: ${lat}<br>Longitude: ${lon}<br>Accuracy: ${Math.round(position.coords.accuracy)}m`;
+        document.getElementById("location").innerHTML = `Latitude: ${lat}<br>Longitude: ${lon}<br>Accuracy: ${Math.round(position.coords.accuracy)}m`;
 
         var location = new google.maps.LatLng(lat, lon);
 

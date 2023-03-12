@@ -10,6 +10,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.http import JsonResponse, HttpResponseBadRequest
 
 from .models import CustomUser, Box, Comment
 from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm, AddBoxForm, FilterForm
@@ -252,9 +253,6 @@ def log_out(request):
 def boxes(request):
     global user
     
-    cities = pd.read_csv(settings.BASE_DIR / "static/all_cities.csv", sep=";", encoding="latin-1")
-    print(cities)
-
     log_in_form = CustomUserLogInForm()
     filter_form = FilterForm()
 
@@ -286,7 +284,7 @@ def boxes(request):
         form = FilterForm(request.POST)
 
         if form.is_valid():
-            print(form.cleaned_data['city'])
+            print(form.cleaned_data["city"])
         
     context = {
         "log_in_form": log_in_form,
@@ -297,6 +295,17 @@ def boxes(request):
     }
 
     return render(request, "boxes.html", context)
+
+
+def get_suggestions(request, input):
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        if request.method == 'GET':
+            cities = pd.read_csv(settings.BASE_DIR / "static/cities_db.csv", sep=";")
+            cities = cities.loc[cities['Name'].str.startswith(input.title())].sort_values(by='Population', ascending=False).head(5).to_json(force_ascii=False, orient='records')
+            
+            return JsonResponse({'context': cities})
+    else:
+        return HttpResponseBadRequest('Invalid request')
 
 
 @login_required
