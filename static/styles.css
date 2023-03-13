@@ -223,6 +223,7 @@ input[type=checkbox] {
 #div_id_city {
   position: relative;
   display: inline-block;
+  width: 100%;
 }
 
 .autocomplete-items {
@@ -234,6 +235,7 @@ input[type=checkbox] {
   top: 100%;
   left: 0;
   right: 0;
+  border-radius: 5px;
 }
 
 .autocomplete-items div {
@@ -241,15 +243,11 @@ input[type=checkbox] {
   cursor: pointer;
   background-color: #fff;
   border-bottom: 1px solid #d4d4d4;
+  border-radius: 5px;
 }
 
 .autocomplete-items div:hover {
   background-color: #bee5bf;
-}
-
-.autocomplete-active {
-  background-color: #003e1f !important;
-  color: #ffffff;
 }
 
 @media (min-width: 640px) {

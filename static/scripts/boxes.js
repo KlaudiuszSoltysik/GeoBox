@@ -65,55 +65,54 @@ cityField = document.getElementById("id_city");
 cityField.addEventListener("input", () => {
     if (cityField.value) {
         fetch(`get-suggestions/${cityField.value}`, {
-            method: "GET",
-            headers: {
-              "X-Requested-With": "XMLHttpRequest",
-            }
-          })
-          .then(response => response.json())
-          .then(data => {
-            autocomplete(JSON.parse(data["context"]));
-          });
+                method: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                autocomplete(JSON.parse(data["context"]));
+            });
+    } else {
+        closeAllLists();
     }
 });
 
-function autocomplete(arr) {
-    var currentFocus;
+function autocomplete(cityArray) {
     closeAllLists();
 
-        currentFocus = -1;
+    autocompleteDiv = document.createElement("DIV");
+    autocompleteDiv.setAttribute("id", this.id + "autocomplete-list");
+    autocompleteDiv.setAttribute("class", "autocomplete-items");
+    cityField.parentNode.appendChild(autocompleteDiv);
 
-        a = document.createElement("DIV");
-        a.setAttribute("id", this.id + "autocomplete-list");
-        a.setAttribute("class", "autocomplete-items");
-        this.parentNode.appendChild(a);
+    for (i = 0; i < cityArray.length; i++) {
+        autocompleteField = document.createElement("DIV");
 
-        for (i = 0; i < arr.length; i++) {
-            b = document.createElement("DIV");
-            
-            b.innerHTML = "<strong>" + arr[i]["Name"].substr(0, val.length) + "</strong>";
-            b.innerHTML += arr[i]["Name"].substr(val.length);
-            b.innerHTML += "<input type='hidden' value='" + arr[i]["Name"] + "'>";
-            b.addEventListener("click", function(e) {
-                cityField.value = this.getElementsByTagName("input")[0].value;
-                closeAllLists();
-            });
-            a.appendChild(b);
-          
-        
+        autocompleteField.innerHTML = "<strong>" + cityArray[i]["Name"].substr(0, cityField.value.length) + "</strong>";
+        autocompleteField.innerHTML += cityArray[i]["Name"].substr(cityField.value.length);
+        autocompleteField.innerHTML += "<input type='hidden' value='" + cityArray[i]["Name"] + "'>";
+
+        autocompleteField.addEventListener("click", function(e) {
+            cityField.value = this.getElementsByTagName("input")[0].value;
+            closeAllLists();
+        });
+
+        autocompleteDiv.appendChild(autocompleteField);
     };
-    
-    function closeAllLists(elmnt) {
-        var x = document.getElementsByClassName("autocomplete-items");
-        
-        for (var i = 0; i < x.length; i++) {
-            if (elmnt != x[i] && elmnt != cityField) {
-                x[i].parentNode.removeChild(x[i]);
-            }
-        }
-    }
-    
-    document.addEventListener("click", function (e) {
-        closeAllLists(e.target);
-    });
 }
+
+function closeAllLists() {
+    var x = document.getElementsByClassName("autocomplete-items");
+
+    for (var i = 0; i < x.length; i++) {
+
+        x[i].parentNode.removeChild(x[i]);
+
+    }
+}
+
+document.addEventListener("click", () => {
+    closeAllLists();
+});
