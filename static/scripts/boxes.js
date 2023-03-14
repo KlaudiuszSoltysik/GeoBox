@@ -62,6 +62,14 @@ function deg2rad(deg) {
 
 cityField = document.getElementById("id_city");
 
+city = document.getElementById("data-storage-boxes").dataset.city;
+radius = document.getElementById("data-storage-boxes").dataset.radius;
+
+if (city && radius) {
+    cityField.value = city;
+    document.getElementById("id_radius").value = radius;
+}
+
 cityField.addEventListener("input", () => {
     if (cityField.value) {
         fetch(`get-suggestions/${cityField.value}`, {
@@ -116,3 +124,4 @@ function closeAllLists() {
 document.addEventListener("click", () => {
     closeAllLists();
 });
+

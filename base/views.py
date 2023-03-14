@@ -17,12 +17,11 @@ from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPassword
 from .tokens import AccountActivationTokenGenerator, account_activation_token
 
 import pandas as pd
-
-user = None
+import geopy.distance
 
 
 def log_in(request):
-    global user
+    user = request.session.get("user")
 
     if request.method == "POST":
         log_in_form = CustomUserLogInForm(request.POST)
@@ -37,6 +36,7 @@ def log_in(request):
                 request.session.set_expiry(2592000)
 
             user = authenticate(username=email, password=password)
+            request.session["user"] = user
 
             if user is not None:
                 login(request, user)
@@ -51,7 +51,7 @@ def log_in(request):
 
 
 def index(request):
-    global user
+    user = request.user
 
     log_in_form = CustomUserLogInForm()
 
@@ -243,25 +243,36 @@ def set_new_password(request, uidb64, token):
 
 
 def log_out(request):
-    global user
     logout(request)
-    user = None
+    request.user = None
+    
     messages.add_message(request, messages.INFO, "Now you're logged out.")
     return redirect("index")
 
 
-def boxes(request):
-    global user
+def boxes(request):        
+    user = request.user
     
     log_in_form = CustomUserLogInForm()
     filter_form = FilterForm()
 
-    boxes = Box.objects.all()
-
+    if filter := request.session.get("box_filter"):
+        boxes = Box.objects.all().filter(id__in=filter)
+        form_city = request.session.get("form_city")
+        form_radius = request.session.get("form_radius")
+        
+        del request.session["box_filter"]
+        del request.session["form_city"]
+        del request.session["form_radius"]
+    else:
+        boxes = Box.objects.all()
+        form_city = ""
+        form_radius = ""
+    
     paginator = Paginator(boxes, 5)
     page = request.GET.get("page")
     boxes = paginator.get_page(page)
-
+    
     if boxes.paginator.num_pages < 5:
         page_numbers = range(1, boxes.paginator.num_pages + 1)
     else:
@@ -269,6 +280,7 @@ def boxes(request):
             min = 1
         else:
             min = boxes.number - 2
+            
         if boxes.number > boxes.paginator.num_pages - 2:
             max = boxes.paginator.num_pages + 1
         else:
@@ -284,7 +296,27 @@ def boxes(request):
         form = FilterForm(request.POST)
 
         if form.is_valid():
-            print(form.cleaned_data["city"])
+            cities = pd.read_csv(settings.BASE_DIR / "static/cities_db.csv", sep=";")
+            
+            city = form.cleaned_data["city"]
+            radius = form.cleaned_data["radius"]
+            
+            request.session["form_city"] = city
+            request.session["form_radius"] = radius
+            
+            city_row = cities.loc[cities["Name"] == city.title()]
+            
+            city_lat, city_lon = str(city_row["Coordinates"].iloc[0]).split(", ")
+            
+            tmp_box_filter = []
+            
+            for box in Box.objects.all():
+                if geopy.distance.geodesic((float(city_lat), float(city_lon)), (float(box.lat), float(box.lon))).m <= float(radius):
+                    tmp_box_filter.append(box.id)
+            
+            request.session["box_filter"] = tmp_box_filter
+            
+            return redirect("boxes")
         
     context = {
         "log_in_form": log_in_form,
@@ -292,6 +324,8 @@ def boxes(request):
         "user": user,
         "boxes": boxes,
         "page_numbers": page_numbers,
+        "form_city": form_city,
+        "form_radius": form_radius,
     }
 
     return render(request, "boxes.html", context)
@@ -310,7 +344,7 @@ def get_suggestions(request, input):
 
 @login_required
 def add_box(request):
-    global user
+    user = request.user
 
     log_in_form = CustomUserLogInForm()
     form = AddBoxForm()

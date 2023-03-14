@@ -68,4 +68,4 @@ class AddBoxForm(forms.ModelForm):
 
 class FilterForm(forms.Form):
     city = forms.CharField(label="City", widget=forms.TextInput(attrs={"placeholder": "City"}))
-    radius = forms.IntegerField(label="Radius", widget=forms.NumberInput(attrs={"placeholder": "Radius"}))
+    radius = forms.IntegerField(label="Radius (m)", widget=forms.NumberInput(attrs={"placeholder": "Radius (m)"}))
