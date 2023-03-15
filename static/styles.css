@@ -250,6 +250,14 @@ input[type=checkbox] {
   background-color: #bee5bf;
 }
 
+.page-link {
+  color: black;
+}
+
+.page-link:hover {
+  color: black;
+}
+
 @media (min-width: 640px) {
   .header .logo {
     flex: 0 0 auto;

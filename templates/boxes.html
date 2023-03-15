@@ -24,7 +24,14 @@
     {% csrf_token %}
       {{ filter_form.city|as_crispy_field }}
       {{ filter_form.radius|as_crispy_field }}
-    <button type="submit" class="btn log-in-btn">Filter</button>
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn">Filter</button>
+        </div>
+        <div class="col">
+          <input type="button" value="Reset filters" class="btn" id="reset-filters"></input>
+        </div>
+      </div>
   </form>
 </div>
 
@@ -49,23 +56,22 @@
 
 <ul class="pagination justify-content-center">
   {% if boxes.has_previous %}
-  <li class="page-item"><a class="page-link" href="?page=1" style="color: #bee5bf;">&laquo First</a></li>
-  <li class="page-item"><a class="page-link" href="?page={{ boxes.previous_page_number }}"
-      style="color: #bee5bf;">Previous</a></li>
+  <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+  <li class="page-item"><a class="page-link" href="?page={{ boxes.previous_page_number }}">Previous</a></li>
   {% endif %}
   {% for i in page_numbers %}
   {% if boxes.number == i %}
-  <li class="page-item"><a class="page-link" href="?page={{ i }}" style="color: #003e1f;">{{ i }}</a></li>
+  <li class="page-item"><a class="page-link" href="?page={{ i }}" style="background-color: #bee5bf;">{{ i }}</a></li>
   {% elif i == '...' %}
-  <li class="page-item"><a class="page-link" style="color: #bee5bf;">{{ i }}</a></li>
+  <li class="page-item"><a class="page-link">{{ i }}</a></li>
   {% else %}
-  <li class="page-item"><a class="page-link" href="?page={{ i }}" style="color: #bee5bf;">{{ i }}</a></li>
+  <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
   {% endif %}
   {% endfor %}
   {% if boxes.has_next %}
-  <li class="page-item"><a class="page-link" href="?page={{ boxes.next_page_number }}" style="color: #bee5bf;">Next</a>
+  <li class="page-item"><a class="page-link" href="?page={{ boxes.next_page_number }}">Next</a>
   </li>
-  <li class="page-item"><a class="page-link" href="?page={{ boxes.paginator.num_pages }}" style="color: #bee5bf;">Last
+  <li class="page-item"><a class="page-link" href="?page={{ boxes.paginator.num_pages }}">Last
       &raquo</a>
   </li>
   {% endif %}

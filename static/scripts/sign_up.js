@@ -9,8 +9,6 @@ password.addEventListener("input", () => {
     }
 });
 
-document.getElementById("log-in-link").style.display = "none";
-
 document.getElementById("show-password").addEventListener("click", () => {
     if (password.type === "password") {
         password.type = "text";

@@ -61,13 +61,14 @@ function deg2rad(deg) {
 }
 
 cityField = document.getElementById("id_city");
+radiusField = document.getElementById("id_radius");
 
 city = document.getElementById("data-storage-boxes").dataset.city;
 radius = document.getElementById("data-storage-boxes").dataset.radius;
 
 if (city && radius) {
     cityField.value = city;
-    document.getElementById("id_radius").value = radius;
+    radiusField.value = radius;
 }
 
 cityField.addEventListener("input", () => {
@@ -123,5 +124,10 @@ function closeAllLists() {
 
 document.addEventListener("click", () => {
     closeAllLists();
+});
+
+document.getElementById("reset-filters").addEventListener("click", () => {
+    cityField.value = "";
+    radiusField.value = "";
 });
 
