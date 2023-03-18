@@ -19,9 +19,8 @@ from .tokens import AccountActivationTokenGenerator, account_activation_token
 import pandas as pd
 import geopy.distance
 
-# filtry się resetują
 # dodać sortowanie
-# zaznaczyć boxy na mapie
+# zaznaczyć boxy na mapie w backendzie?
 
 
 def log_out(request):
@@ -196,7 +195,10 @@ def index(request):
                 )
     
     context = {"log_in_form": log_in_form, 
-               "user": user}
+               "user": user,
+               "boxes_lat": [box.lat for box in Box.objects.all()],
+               "boxes_lon": [box.lon for box in Box.objects.all()],
+               "boxes_img": [box.img1 for box in Box.objects.all()]}
 
     return render(request, "index.html", context)
 

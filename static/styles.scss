@@ -290,6 +290,10 @@ input[type="checkbox"] {
   color: black;
 }
 
+#markerLayer img {
+  border-radius: 50%;
+}
+
 @media (min-width: 640px) {
   .header {
     .logo {
