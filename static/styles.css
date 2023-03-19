@@ -200,7 +200,7 @@ input[type=checkbox] {
 .box-container {
   padding: 10px;
 }
-.box-container .row {
+.box-container .box-div {
   padding: 20px;
   margin: 0;
   border-radius: 20px;
@@ -260,6 +260,35 @@ input[type=checkbox] {
 
 #markerLayer img {
   border-radius: 50%;
+}
+
+.box-a {
+  text-decoration: none;
+  color: black;
+}
+
+.box-img {
+  width: 80%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.comment {
+  margin: 12px;
+  padding: 10px;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+
+.add-comment .asteriskField {
+  display: none;
+}
+.add-comment .btn {
+  margin: 0 0 10px 0;
+  width: 100%;
+  background-color: #bee5bf !important;
 }
 
 @media (min-width: 640px) {

@@ -13,14 +13,13 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpResponseBadRequest
 
 from .models import CustomUser, Box, Comment
-from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm, AddBoxForm, FilterForm
+from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm, AddBoxForm, FilterForm, AddCommentForm
 from .tokens import AccountActivationTokenGenerator, account_activation_token
 
 import pandas as pd
 import geopy.distance
 
 # dodać sortowanie
-# zaznaczyć boxy na mapie w backendzie?
 
 
 def log_out(request):
@@ -198,7 +197,8 @@ def index(request):
                "user": user,
                "boxes_lat": [box.lat for box in Box.objects.all()],
                "boxes_lon": [box.lon for box in Box.objects.all()],
-               "boxes_img": [box.img1 for box in Box.objects.all()]}
+               "boxes_img": [box.img1 for box in Box.objects.all()],
+               "boxes_id": [box.id for box in Box.objects.all()]}
 
     return render(request, "index.html", context)
 
@@ -393,6 +393,7 @@ def add_box(request):
                 form.instance.user = user
                 form.save()
                 messages.add_message(request, messages.INFO, "Box added.")
+                
                 return redirect("boxes")
             except:
                 messages.add_message(request, messages.INFO, "Something went wrong.")
@@ -402,3 +403,59 @@ def add_box(request):
                "form": form}
 
     return render(request, "add_box.html", context)
+
+
+def box(request, id):
+    user = None
+    
+    if request.user.is_authenticated:
+        user = request.user
+        
+    comments = Comment.objects.all().filter(box=id).order_by("-timestamp", )
+    
+    log_in_form = CustomUserLogInForm()
+    form = AddCommentForm()
+    
+    if request.method == "POST":
+        log_in_form = CustomUserLogInForm(request.POST)
+
+        if log_in_form.is_valid():
+            email = log_in_form.cleaned_data["email"]
+            password = log_in_form.cleaned_data["password1"]
+
+            if not request.POST.get("remember"):
+                request.session.set_expiry(0)
+            else:
+                request.session.set_expiry(2592000)
+
+            user = authenticate(username=email, password=password)
+            
+            if user:
+                login(request, user)
+                
+                messages.add_message(request, messages.INFO, "Nice to see you again!")
+            else:
+                messages.add_message(
+                    request, messages.INFO, "We couldn't log in account with that data."
+                )
+    
+    if request.method == "POST":        
+        form = AddCommentForm(request.POST)
+
+        if form.is_valid():
+            try:
+                form.instance.user = user
+                form.instance.box = Box.objects.get(id=id)
+                form.save()
+                
+                return redirect('box', id=id)
+            except:
+                messages.add_message(request, messages.INFO, "Something went wrong.")
+    
+    context = {"log_in_form": log_in_form,
+               "user": user,
+               "box": Box.objects.get(id=id),
+               "comments": comments,
+               "form": form}
+    
+    return render(request, "box.html", context)

@@ -1,0 +1,51 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load templatetags %}
+
+{% block content %}
+
+<div href="{% url 'box' id=box.id %}" class="container-lg box-container">
+  <div class="box-div" style="background-color: {{ box.img1|getDominantColor }}">
+    <div class="row">
+      <div class="col-lg-4">
+        <h1>{{ box.name }}</h1>
+        <h2>{{ box.difficulty|stars }}</h2>
+        <h2>{{ box.user }}</h2>
+      </div>
+      <div class="col-lg-4">
+        <img class="box-img" src="{{ box.img1.url }}">
+      </div>
+      {% if box.img2 %}
+        <div class="col-lg-4">
+          <img class="box-img" src="{{ box.img2.url }}">
+        </div>
+      {% endif %}
+      <h4>{{ box.description }}</h4>
+      {% if user %}
+      <h2>Add comment</h2>
+      <div class="add-comment">
+        <form autocomplete="off" method="POST">
+          {% csrf_token %}
+            {{ form.comment|as_crispy_field }}
+          <button type="submit" class="btn">Comment</button>
+        </form>
+      </div>
+      {% endif %}
+      <h2>Newest comments:</h2>
+      {% for comment in comments %}
+        <div class="row comment">
+          <div class="col-md-2">
+            <h4>{{ comment.user.nick }}</h4>
+          </div>
+          <div class="col-md-10">
+            <h4>{{ comment.comment }}</h4>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'scripts/box.js' %}"></script>
+{% endblock %}

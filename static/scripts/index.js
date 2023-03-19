@@ -1,5 +1,5 @@
 var map;
-var marker;
+var userMarker;
 
 var refreshLocation = window.setInterval(() => {
     navigator.geolocation.getCurrentPosition(success, error)
@@ -27,7 +27,7 @@ function initMap() {
         disableDefaultUI: true,
         zoomControl: true,
     });
-    marker = new google.maps.Marker({
+    userMarker = new google.maps.Marker({
         position: new google.maps.LatLng(0, 0),
         map: map,
     });
@@ -40,9 +40,9 @@ function initMap() {
 
         var location = new google.maps.LatLng(lat, lon);
 
-        marker.setPosition(location);
+        userMarker.setPosition(location);
         map.setCenter(location)
-        map.setZoom(18)
+        map.setZoom(10)
     }, error, {
         timeout: 30000,
         enableHighAccuracy: true
@@ -51,18 +51,25 @@ function initMap() {
     var boxesLat = mapElement.dataset.boxes_lat.replace("[", "").replace("]", "").split(", ");
     var boxesLon = mapElement.dataset.boxes_lon.replace("[", "").replace("]", "").split(", ");
     var boxesImg = mapElement.dataset.boxes_img.replace("[", "").replace("]", "").split(", ");
-    
+    var boxesId = mapElement.dataset.boxes_id.replace("[", "").replace("]", "").split(", ");
+
     for (var i = 0; i < boxesLat.length; i++) {
-        new google.maps.Marker({
+        var m = new google.maps.Marker({
             position: new google.maps.LatLng(boxesLat[i], boxesLon[i]),
             map: map,
             icon: {url: "./static" + boxesImg[i].replace("<FieldFile: static", "").replace(">", ""), scaledSize: new google.maps.Size(35, 35)},
+            id: boxesId[i]
         });
+
+        google.maps.event.addListener(m, "click", ((m) => {
+            return () => {
+                window.location.href = `/box/${m.id}`;
+          }})(m, i));    
     }
 
     var overlay = new google.maps.OverlayView();
      overlay.draw = function () {
-         this.getPanes().markerLayer.id='markerLayer';
+         this.getPanes().markerLayer.id="markerLayer";
      };
      overlay.setMap(map);
 }
@@ -70,5 +77,5 @@ function initMap() {
 function updateMap(lat, lon) {
     var location = new google.maps.LatLng(lat, lon);
 
-    marker.setPosition(location);
+    userMarker.setPosition(location);
 }

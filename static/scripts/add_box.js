@@ -20,5 +20,5 @@ function error(msg) {
 }
 
 document.getElementById("id_description").addEventListener("input", () => {
-    document.getElementById("length-counter").textContent = 5000 - this.value.length + "/5000";
+    document.getElementById("length-counter").textContent = 5000 - document.getElementById("id_description").value.length + "/5000";
 });

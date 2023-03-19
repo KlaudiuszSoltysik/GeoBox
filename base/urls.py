@@ -14,4 +14,5 @@ urlpatterns = [
     path('boxes', views.boxes, name='boxes'),
     path('add-box', views.add_box, name='add_box'),
     path('get-suggestions/<str:input>', views.get_suggestions, name='get_suggestions'),
+    path('box/<int:id>', views.box, name='box'),
 ]

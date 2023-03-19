@@ -6,7 +6,7 @@ from crispy_forms.helper import *
 from crispy_forms.layout import *
 from crispy_forms.bootstrap import *
 
-from .models import CustomUser, Box
+from .models import CustomUser, Box, Comment
 
 
 class CustomUserSignUpForm(UserCreationForm):
@@ -69,3 +69,11 @@ class AddBoxForm(forms.ModelForm):
 class FilterForm(forms.Form):
     city = forms.CharField(label="City", required=False, widget=forms.TextInput(attrs={"placeholder": "City"}))
     radius = forms.IntegerField(label="Radius (m)", required=False, widget=forms.NumberInput(attrs={"placeholder": "Radius (m)"}))
+    
+
+class AddCommentForm(forms.ModelForm):        
+    comment = forms.CharField(label="", widget=forms.TextInput(attrs={"placeholder": "Comment"}))
+    
+    class Meta:
+        model = Comment
+        fields = ("comment",)

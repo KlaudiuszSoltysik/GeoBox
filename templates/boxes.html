@@ -36,22 +36,24 @@
 </div>
 
 {% for box in boxes %}
-<div class="container-lg box-container">
-  <div class="row" style="background-color: {{ box.img1|getDominantColor }}">
-    <div class="col-1">
-      <div class="compas">
-        <h3>N</h3>
+<a href="{% url 'box' id=box.id %}" class="box-a">
+  <div class="container-lg box-container">
+    <div class="row box-div" style="background-color: {{ box.img1|getDominantColor }}">
+      <div class="col-1">
+        <div class="compas">
+          <h3>N</h3>
+        </div>
+        <canvas width="200" height="200"></canvas>
       </div>
-      <canvas width="200" height="200"></canvas>
-    </div>
-    <div class="col-2" style="background-image: url('{{ box.img1 }}')">
-      <h1>{{ box.name }}</h1>
-      <h2 data-lat="{{ box.lat }}" data-lon="{{ box.lon }}" class="position"></h2>
-      <h2>{{ box.difficulty|stars }}</h2>
-      <h2>{{ box.user }}</h2>
+      <div class="col-2" style="background-image: url('{{ box.img1 }}')">
+        <h1>{{ box.name }}</h1>
+        <h2 data-lat="{{ box.lat }}" data-lon="{{ box.lon }}" class="position"></h2>
+        <h2>{{ box.difficulty|stars }}</h2>
+        <h2>{{ box.user }}</h2>
+      </div>
     </div>
   </div>
-</div>
+</a>
 {% endfor %}
 
 <ul class="pagination justify-content-center">
