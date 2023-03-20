@@ -22,16 +22,16 @@
   <p id="data-storage-boxes" data-city="{{ form_city }}" data-radius="{{ form_radius }}"></p>
   <form autocomplete="off" method="POST" action="">
     {% csrf_token %}
-      {{ filter_form.city|as_crispy_field }}
-      {{ filter_form.radius|as_crispy_field }}
-      <div class="row">
-        <div class="col">
-          <button type="submit" class="btn">Filter</button>
-        </div>
-        <div class="col">
-          <input type="button" value="Reset filters" class="btn" id="reset-filters"></input>
-        </div>
+    {{ filter_form.city|as_crispy_field }}
+    {{ filter_form.radius|as_crispy_field }}
+    <div class="row">
+      <div class="col">
+        <button type="submit" class="btn">Filter</button>
       </div>
+      <div class="col">
+        <input type="button" value="Reset filters" class="btn" id="reset-filters"></input>
+      </div>
+    </div>
   </form>
 </div>
 

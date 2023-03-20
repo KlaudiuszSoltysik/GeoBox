@@ -17,9 +17,9 @@
         <img class="box-img" src="{{ box.img1.url }}">
       </div>
       {% if box.img2 %}
-        <div class="col-lg-4">
-          <img class="box-img" src="{{ box.img2.url }}">
-        </div>
+      <div class="col-lg-4">
+        <img class="box-img" src="{{ box.img2.url }}">
+      </div>
       {% endif %}
       <h4>{{ box.description }}</h4>
       {% if user %}
@@ -27,22 +27,48 @@
       <div class="add-comment">
         <form autocomplete="off" method="POST">
           {% csrf_token %}
-            {{ form.comment|as_crispy_field }}
+          {{ form.comment|as_crispy_field }}
           <button type="submit" class="btn">Comment</button>
         </form>
       </div>
       {% endif %}
       <h2>Newest comments:</h2>
       {% for comment in comments %}
-        <div class="row comment">
-          <div class="col-md-2">
-            <h4>{{ comment.user.nick }}</h4>
-          </div>
-          <div class="col-md-10">
-            <h4>{{ comment.comment }}</h4>
-          </div>
+      <div class="row comment">
+        <div class="col-md-2">
+          <h4>{{ comment.user.nick }}</h4>
         </div>
+        <div class="col-md-10">
+          <h4>{{ comment.comment }}</h4>
+          {% if comment.user == user %}
+          <img class="bin-icon" src="{% static 'images/bin-icon.png' %}">
+          {% endif %}
+        </div>
+      </div>
       {% endfor %}
+      <ul class="pagination justify-content-center">
+        {% if comments.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ comments.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        {% for i in page_numbers %}
+        {% if comments.number == i %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}" style="background-color: #bee5bf;">{{ i }}</a>
+        </li>
+        {% elif i == '...' %}
+        <li class="page-item"><a class="page-link">{{ i }}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if comments.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ comments.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="?page={{ comments.paginator.num_pages }}">Last
+            &raquo</a>
+        </li>
+        {% endif %}
+      </ul>
     </div>
   </div>
 </div>

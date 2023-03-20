@@ -8,7 +8,7 @@
   <form autocomplete="off" method="POST" action="">
     {% csrf_token %}
     <h1>Sign up</h1>
-    {{ form.email|as_crispy_field }}  
+    {{ form.email|as_crispy_field }}
     {{ form.password1|as_crispy_field }}
     <input type="checkbox" id="show-password">Show Password<br>
     {{ form.nick|as_crispy_field }}

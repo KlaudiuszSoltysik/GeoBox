@@ -280,6 +280,11 @@ input[type=checkbox] {
   padding: 10px;
   border: 2px solid white;
   border-radius: 5px;
+  width: calc(100% - 24px);
+}
+.comment .bin-icon {
+  display: block;
+  width: 30px;
 }
 
 .add-comment .asteriskField {

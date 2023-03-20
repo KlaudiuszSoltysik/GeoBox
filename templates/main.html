@@ -28,32 +28,33 @@
           <img src="{% static 'images/box-160x160.png' %}" id="logo">
           GeoBox
         </a>
-      </div><div class="col install-col">
+      </div>
+      <div class="col install-col">
         <a id="install-link">Install</a>
       </div>
       <div class="col">
         <a href="{% url 'boxes' %}">Boxes</a>
       </div>
       {% if user %}
-        <div class="col">
-          <a href="{% url 'log_out' %}">Log out</a>
-        </div>
+      <div class="col">
+        <a href="{% url 'log_out' %}">Log out</a>
+      </div>
       {% else %}
-        <div class="col">
-          <a class="log-in-link" id="log-in-link">Log in</a>
-        </div>
+      <div class="col">
+        <a class="log-in-link" id="log-in-link">Log in</a>
+      </div>
       {% endif %}
     </div>
   </div>
 
   <!-- MESSAGES -->
   {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-info" role="alert">
-      {{ message }}
-    </div>
-    {% endfor %}
-{% endif %}
+  {% for message in messages %}
+  <div class="alert alert-info" role="alert">
+    {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
 
   <!-- LOG IN FORM -->
   <div class="form-group log-in-form" id="log-in-form">

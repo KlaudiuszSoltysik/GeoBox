@@ -1,6 +1,6 @@
 # GeoBox
 ## About 
-GeoBox is my version of a geocaching website. I designed it mobile first so it could be downloaded as a PWA. I put the visual aspects aside and focused on technical aspects.
+GeoBox is my version of a geocaching website. I had put the visual aspects aside and focused on technical aspects.
 ## Functions
 An user can:    
 - sign up (email, password and nickname) or log in (website is running localy with SQLite database) 
@@ -13,10 +13,13 @@ An user can:
 - if he uses a browser he can download PWA    
 - navigate on the website and use links to other websites   
 - browse all boxes (with pagination) (box card contains distance-meter and compas to every box made using geolocation in JS) (box card is the same color as box image dominant color)
-- filter nerby boxes (city and radius) (AJAX is used to get autocomplete options for city field)
+- filter nerby boxes (city and radius)
 - sort boxes
+- view comments
 Additionally, a logged in user can:
 - log out
 - add boxes (find me button automatically complete latitude and longitude form fields)
+- add and delete (AJAX) comments
+- view account (with all comments and boxes) (edit and delete options)
 ## Presentation
 Video-presentation link:
