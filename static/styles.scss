@@ -333,6 +333,12 @@ input[type="checkbox"] {
   }
 }
 
+#load-comments {
+  margin: 0 12px 10px 12px;
+  width: calc(100% - 24px);
+  background-color: #bee5bf !important;
+}
+
 .confirm {
   position: fixed;
   top: 0;
@@ -429,19 +435,29 @@ input[type="checkbox"] {
 }
 
 @keyframes confirm-open {
-  from { opacity: 0 }
-  to { opacity: 1 }
+  from {
+    opacity: 0
+  }
+
+  to {
+    opacity: 1
+  }
 }
 
 @keyframes confirm-close {
-  from { opacity: 1 }
-  to { opacity: 0 }
+  from {
+    opacity: 1
+  }
+
+  to {
+    opacity: 0
+  }
 }
 
 @keyframes confirm-window-open {
   to {
-      opacity: 1;
-      transform: scale(1);
+    opacity: 1;
+    transform: scale(1);
   }
 }
 

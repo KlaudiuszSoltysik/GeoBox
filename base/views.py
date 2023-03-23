@@ -22,7 +22,6 @@ import geopy.distance
 # dodać sortowanie
 # dadać nawigację do boxa
 # my account (boxy, komentarze, edycja, kasowanie)
-# show more komentarzy zamiast paginacji
 
 def log_out(request):
     logout(request)
@@ -467,33 +466,10 @@ def box(request, id):
             except:
                 messages.add_message(request, messages.INFO, 'Something went wrong.')
     
-    paginator = Paginator(comments, 5)
-    page = request.GET.get('page')
-    comments = paginator.get_page(page)
-    pages_count = comments.paginator.num_pages
-    
-    if pages_count < 5:
-        page_numbers = range(1, pages_count + 1)
-    else:
-        if n := comments.number < 3:
-            min = 1
-        else:
-            min = n - 2
-            
-        if n := comments.number > pages_count - 2:
-            max = pages_count + 1
-        else:
-            max = n + 3
-
-        page_numbers = list(range(min, max))
-        page_numbers.append('...')
-        page_numbers.append(pages_count)  
-    
     context = {'log_in_form': log_in_form,
                'user': user,
                'box': Box.objects.get(id=id),
                'comments': comments,
-               'page_numbers': page_numbers,
                'form': form}
     
     return render(request, 'box.html', context)

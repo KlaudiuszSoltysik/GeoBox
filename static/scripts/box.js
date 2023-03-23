@@ -1,26 +1,58 @@
-userComments = document.getElementsByClassName('bin-icon')
+var userComments = document.getElementsByClassName('bin-icon');
+var comments = document.getElementsByClassName('comment');
 const csrftoken = getCookie('csrftoken');
+var commentsCount = 5;
+const loadComments = document.getElementById('load-comments');
 
-for (var comment of userComments) {
-    comment.addEventListener('click', () => {
-        Confirm.open({
-            title: 'Confirm',
-            message: 'Are you sure you want to delete your comment?',
-            onok: () => {
-                fetch(`/delete-comment/${comment.dataset.comment_id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRFToken': csrftoken,
-                    }
-                }).then(response => response.json())
-                .then(data => {
-                    if (JSON.parse(data['success'])) {
-                        comment.parentElement.parentElement.remove()
-                    }
-                });
-            }
-          })
-    });
+loadComments.addEventListener('click', () => {
+    commentsCount += 5;
+    hideComments();
+    hideBtn();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    hideComments();
+    hideBtn()
+});
+
+function hideComments() {
+    for (var com of comments) {
+        com.style.display = 'flex';
+    }
+
+    for (var i = commentsCount; i < comments.length; i++) {
+        comments[i].style.display = 'none';
+    }
+}
+
+function hideBtn () {
+    if (commentsCount >= comments.length) {
+        loadComments.style.display = 'none'
+    }
+}
+
+
+function deleteComment(id, self) {
+    Confirm.open({
+        title: 'Confirm',
+        message: 'Are you sure you want to delete your comment?',
+        onok: () => {
+            fetch(`/delete-comment/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                }
+            }).then(response => response.json())
+            .then(data => {
+                if (JSON.parse(data['success'])) {
+                    self.parentNode.parentNode.remove();
+                    comments = document.getElementsByClassName('comment');
+                    hideComments();
+                    hideBtn();
+                }
+            });
+        }
+      }); 
 }
 
 function getCookie(name) {

@@ -297,6 +297,12 @@ input[type=checkbox] {
   background-color: #bee5bf !important;
 }
 
+#load-comments {
+  margin: 0 12px 10px 12px;
+  width: calc(100% - 24px);
+  background-color: #bee5bf !important;
+}
+
 .confirm {
   position: fixed;
   top: 0;

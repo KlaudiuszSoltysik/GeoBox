@@ -43,7 +43,8 @@
           <h4>{{ comment.comment }}</h4>
         </div>
         <div class="col-md-1">
-          <img data-comment_id="{{ comment.id }}" class="bin-icon" src="{% static 'images/bin-icon.png' %}">
+          <img data-comment_id="{{ comment.id }}" onclick="deleteComment({{ comment.id }}, this)" class="bin-icon"
+            src="{% static 'images/bin-icon.png' %}">
         </div>
       </div>
       {% else %}
@@ -57,29 +58,7 @@
       </div>
       {% endif %}
       {% endfor %}
-      <ul class="pagination justify-content-center">
-        {% if comments.has_previous %}
-        <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
-        <li class="page-item"><a class="page-link" href="?page={{ comments.previous_page_number }}">Previous</a></li>
-        {% endif %}
-        {% for i in page_numbers %}
-        {% if comments.number == i %}
-        <li class="page-item"><a class="page-link" href="?page={{ i }}" style="background-color: #bee5bf;">{{ i }}</a>
-        </li>
-        {% elif i == '...' %}
-        <li class="page-item"><a class="page-link">{{ i }}</a></li>
-        {% else %}
-        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-        {% endif %}
-        {% endfor %}
-        {% if comments.has_next %}
-        <li class="page-item"><a class="page-link" href="?page={{ comments.next_page_number }}">Next</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="?page={{ comments.paginator.num_pages }}">Last
-            &raquo</a>
-        </li>
-        {% endif %}
-      </ul>
+      <button class="btn" id="load-comments">Load more comments</button>
     </div>
   </div>
 </div>
