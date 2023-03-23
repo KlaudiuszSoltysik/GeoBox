@@ -1,4 +1,4 @@
-var positions = document.getElementsByClassName("position");
+var positions = document.getElementsByClassName('position');
 
 window.onload = navigator.geolocation.getCurrentPosition(success);
 
@@ -10,12 +10,12 @@ function success(position) {
         var lat1 = parseFloat(positions[i].dataset.lat);
         var lon1 = parseFloat(positions[i].dataset.lon);
         drawArrow(lat1, lon1, lat2, lon2, i)
-        positions[i].innerHTML = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) + " m"
+        positions[i].innerHTML = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) + ' m'
     }
 }
 
 function drawArrow(lat1, lon1, lat2, lon2, i) {
-    context = document.getElementsByTagName("canvas")[i].getContext("2d");
+    context = document.getElementsByTagName('canvas')[i].getContext('2d');
     context.lineWidth = 5;
     const R = 100;
     const headLen = 20;
@@ -60,28 +60,28 @@ function deg2rad(deg) {
     return deg * (Math.PI / 180);
 }
 
-cityField = document.getElementById("id_city");
-radiusField = document.getElementById("id_radius");
+cityField = document.getElementById('id_city');
+radiusField = document.getElementById('id_radius');
 
-city = document.getElementById("data-storage-boxes").dataset.city;
-radius = document.getElementById("data-storage-boxes").dataset.radius;
+city = document.getElementById('data-storage-boxes').dataset.city;
+radius = document.getElementById('data-storage-boxes').dataset.radius;
 
 if (city && radius) {
     cityField.value = city;
     radiusField.value = radius;
 }
 
-cityField.addEventListener("input", () => {
+cityField.addEventListener('input', () => {
     if (cityField.value) {
         fetch(`get-suggestions/${cityField.value}`, {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                    "X-Requested-With": "XMLHttpRequest",
+                    'X-Requested-With': 'XMLHttpRequest',
                 }
             })
             .then(response => response.json())
             .then(data => {
-                autocomplete(JSON.parse(data["context"]));
+                autocomplete(JSON.parse(data['context']));
             });
     } else {
         closeAllLists();
@@ -91,20 +91,20 @@ cityField.addEventListener("input", () => {
 function autocomplete(cityArray) {
     closeAllLists();
 
-    autocompleteDiv = document.createElement("DIV");
-    autocompleteDiv.setAttribute("id", this.id + "autocomplete-list");
-    autocompleteDiv.setAttribute("class", "autocomplete-items");
+    autocompleteDiv = document.createElement('DIV');
+    autocompleteDiv.setAttribute('id', this.id + 'autocomplete-list');
+    autocompleteDiv.setAttribute('class', 'autocomplete-items');
     cityField.parentNode.appendChild(autocompleteDiv);
 
     for (i = 0; i < cityArray.length; i++) {
-        autocompleteField = document.createElement("DIV");
+        autocompleteField = document.createElement('DIV');
 
-        autocompleteField.innerHTML = "<strong>" + cityArray[i]["Name"].substr(0, cityField.value.length) + "</strong>";
-        autocompleteField.innerHTML += cityArray[i]["Name"].substr(cityField.value.length);
-        autocompleteField.innerHTML += "<input type='hidden' value='" + cityArray[i]["Name"] + "'>";
+        autocompleteField.innerHTML = '<strong>' + cityArray[i]['Name'].substr(0, cityField.value.length) + '</strong>';
+        autocompleteField.innerHTML += cityArray[i]['Name'].substr(cityField.value.length);
+        autocompleteField.innerHTML += "<input type='hidden' value='' + cityArray[i]['Name'] + ''>";
 
-        autocompleteField.addEventListener("click", function(e) {
-            cityField.value = this.getElementsByTagName("input")[0].value;
+        autocompleteField.addEventListener('click', function(e) {
+            cityField.value = this.getElementsByTagName('input')[0].value;
             closeAllLists();
         });
 
@@ -113,7 +113,7 @@ function autocomplete(cityArray) {
 }
 
 function closeAllLists() {
-    var x = document.getElementsByClassName("autocomplete-items");
+    var x = document.getElementsByClassName('autocomplete-items');
 
     for (var i = 0; i < x.length; i++) {
 
@@ -122,12 +122,12 @@ function closeAllLists() {
     }
 }
 
-document.addEventListener("click", () => {
+document.addEventListener('click', () => {
     closeAllLists();
 });
 
-document.getElementById("reset-filters").addEventListener("click", () => {
-    cityField.value = "";
-    radiusField.value = "";
+document.getElementById('reset-filters').addEventListener('click', () => {
+    cityField.value = '';
+    radiusField.value = '';
 });
 

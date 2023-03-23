@@ -15,7 +15,7 @@ An user can:
 - browse all boxes (with pagination) (box card contains distance-meter and compas to every box made using geolocation in JS) (box card is the same color as box image dominant color)
 - filter nerby boxes (city and radius)
 - sort boxes
-- view comments
+- view comments    
 Additionally, a logged in user can:
 - log out
 - add boxes (find me button automatically complete latitude and longitude form fields)

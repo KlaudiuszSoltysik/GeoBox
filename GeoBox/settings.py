@@ -78,7 +78,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-AUTH_USER_MODEL = "base.CustomUser"
+AUTH_USER_MODEL = 'base.CustomUser'
 
 LANGUAGE_CODE = 'en-us'
 
@@ -90,7 +90,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / 'static',
 ]
 
 LOGIN_URL = ''
@@ -99,7 +99,7 @@ MEDIA_ROOT = ''
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PWA_APP_NAME = 'GeoBox'
-PWA_APP_DESCRIPTION = "GeoBox application"
+PWA_APP_DESCRIPTION = 'GeoBox application'
 PWA_APP_THEME_COLOR = '#0A0302'
 PWA_APP_BACKGROUND_COLOR = '#ffffff'
 PWA_APP_DISPLAY = 'standalone'

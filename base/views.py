@@ -22,13 +22,14 @@ import geopy.distance
 # dodać sortowanie
 # dadać nawigację do boxa
 # my account (boxy, komentarze, edycja, kasowanie)
+# show more komentarzy zamiast paginacji
 
 def log_out(request):
     logout(request)
     request.user = None
     
     messages.add_message(request, messages.INFO, "Now you're logged out.")
-    return redirect("index")
+    return redirect('index')
 
 
 def activate(request, uidb64, token):
@@ -44,40 +45,40 @@ def activate(request, uidb64, token):
         user.save()
 
         messages.info(
-            request, "Thank you for your email confirmation. Now you can login."
+            request, 'Thank you for your email confirmation. Now you can login.'
         )
     else:
-        messages.info(request, "Activation link is invalid!")
+        messages.info(request, 'Activation link is invalid!')
 
-    return redirect("index")
+    return redirect('index')
 
 
 def reset_password(request):
     log_in_form = CustomUserLogInForm()
     form = CustomUserPasswordResetForm()
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CustomUserPasswordResetForm(request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data["email"]
+            email = form.cleaned_data['email']
 
             try:
                 user = CustomUser.objects.get(email=email)
             except:
                 messages.info(request, f"We couldn't send an email to {email}.")
-                return redirect("reset_password")
+                return redirect('reset_password')
 
             if user:
-                mail_subject = "Reset your password."
+                mail_subject = 'Reset your password.'
                 message = render_to_string(
-                    settings.BASE_DIR / "templates/email/reset_password.html",
+                    settings.BASE_DIR / 'templates/email/reset_password.html',
                     {
-                        "user": user.email,
-                        "domain": get_current_site(request).domain,
-                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-                        "token": default_token_generator.make_token(user),
-                        "protocol": "https" if request.is_secure() else "http",
+                        'user': user.email,
+                        'domain': get_current_site(request).domain,
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'https' if request.is_secure() else 'http',
                     },
                 )
 
@@ -85,29 +86,29 @@ def reset_password(request):
 
                 if mail.send():
                     messages.info(
-                        request, f"Check your {email} inbox to reset your password."
+                        request, f'Check your {email} inbox to reset your password.'
                     )
                 else:
                     messages.info(request, f"We couldn't send an email to {email}.")
 
-                return redirect("index")
+                return redirect('index')
 
             else:
                 messages.warning(request, f"User {email} doesn't exist.")
-                return redirect("reset_password_email")
+                return redirect('reset_password_email')
 
-    context = {"log_in_form": log_in_form, 
-               "form": form,
-               "user": None}
+    context = {'log_in_form': log_in_form, 
+               'form': form,
+               'user': None}
     
-    return render(request, "reset_password_email.html", context)
+    return render(request, 'reset_password_email.html', context)
 
 
 def set_new_password(request, uidb64, token):
     log_in_form = CustomUserLogInForm()
     form = CustomUserSetPasswordForm()
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CustomUserSetPasswordForm(request.POST)
 
         if form.is_valid():
@@ -120,31 +121,40 @@ def set_new_password(request, uidb64, token):
 
             if user is not None and default_token_generator.check_token(user, token):
 
-                password = form.cleaned_data["password1"]
+                password = form.cleaned_data['password1']
 
                 if len(password) < 8:
-                    messages.info(request, "Invalid password.")
-                    return redirect("set_new_password", uidb64=uidb64, token=token)
+                    messages.info(request, 'Invalid password.')
+                    return redirect('set_new_password', uidb64=uidb64, token=token)
 
                 user.set_password(password)
                 user.save()
-                messages.info(request, "Password resetted. Now you can login.")
+                messages.info(request, 'Password resetted. Now you can login.')
             else:
-                messages.info(request, "Reset link is invalid!")
+                messages.info(request, 'Reset link is invalid!')
 
-            return redirect("index")
+            return redirect('index')
         
-    context = {"log_in_form": log_in_form, 
-               "form": form,
-               "user": None}
+    context = {'log_in_form': log_in_form, 
+               'form': form,
+               'user': None}
 
-    return render(request, "reset_password_password.html", context)
+    return render(request, 'reset_password_password.html', context)
+    
+    
+def reset_filters(request):
+    try:
+        del request.session['box_filter']
+        del request.session['form_city']
+        del request.session['form_radius']
+    except:
+        pass
 
-
+   
 def get_suggestions(request, input):
-    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         if request.method == 'GET':
-            cities = pd.read_csv(settings.BASE_DIR / "static/cities_db.csv", sep=";")
+            cities = pd.read_csv(settings.BASE_DIR / 'static/cities_db.csv', sep=';')
             cities = cities.loc[cities['Name'].str.startswith(input.title())].sort_values(by='Population', ascending=False).head(5).to_json(force_ascii=False, orient='records')
             
             return JsonResponse({'context': cities})
@@ -152,13 +162,16 @@ def get_suggestions(request, input):
         return HttpResponseBadRequest('Invalid request')
     
     
-def reset_filters(request):
-    try:
-        del request.session["box_filter"]
-        del request.session["form_city"]
-        del request.session["form_radius"]
-    except:
-        pass
+def delete_comment(request, id):
+    if request.method == 'DELETE':
+        comment = Comment.objects.get(id=id)
+            
+        if comment.user == request.user:
+            comment.delete()
+                
+        return JsonResponse({'success': 'true'})
+    else:
+        return HttpResponseBadRequest('Invalid request')
 
     
 def index(request):
@@ -171,14 +184,14 @@ def index(request):
     
     reset_filters(request)
     
-    if request.method == "POST":
+    if request.method == 'POST':
         log_in_form = CustomUserLogInForm(request.POST)
 
         if log_in_form.is_valid():
-            email = log_in_form.cleaned_data["email"]
-            password = log_in_form.cleaned_data["password1"]
+            email = log_in_form.cleaned_data['email']
+            password = log_in_form.cleaned_data['password1']
 
-            if not request.POST.get("remember"):
+            if not request.POST.get('remember'):
                 request.session.set_expiry(0)
             else:
                 request.session.set_expiry(2592000)
@@ -188,20 +201,20 @@ def index(request):
             if user:
                 login(request, user)
                 
-                messages.add_message(request, messages.INFO, "Nice to see you again!")
+                messages.add_message(request, messages.INFO, 'Nice to see you again!')
             else:
                 messages.add_message(
                     request, messages.INFO, "We couldn't log in account with that data."
                 )
     
-    context = {"log_in_form": log_in_form, 
-               "user": user,
-               "boxes_lat": [box.lat for box in Box.objects.all()],
-               "boxes_lon": [box.lon for box in Box.objects.all()],
-               "boxes_img": [box.img1 for box in Box.objects.all()],
-               "boxes_id": [box.id for box in Box.objects.all()]}
+    context = {'log_in_form': log_in_form, 
+               'user': user,
+               'boxes_lat': [box.lat for box in Box.objects.all()],
+               'boxes_lon': [box.lon for box in Box.objects.all()],
+               'boxes_img': [box.img1 for box in Box.objects.all()],
+               'boxes_id': [box.id for box in Box.objects.all()]}
 
-    return render(request, "index.html", context)
+    return render(request, 'index.html', context)
 
 
 def sign_up(request):
@@ -210,14 +223,14 @@ def sign_up(request):
 
     reset_filters(request)
     
-    if request.method == "POST":
+    if request.method == 'POST':
         log_in_form = CustomUserLogInForm(request.POST)
 
         if log_in_form.is_valid():
-            email = log_in_form.cleaned_data["email"]
-            password = log_in_form.cleaned_data["password1"]
+            email = log_in_form.cleaned_data['email']
+            password = log_in_form.cleaned_data['password1']
 
-            if not request.POST.get("remember"):
+            if not request.POST.get('remember'):
                 request.session.set_expiry(0)
             else:
                 request.session.set_expiry(2592000)
@@ -227,50 +240,50 @@ def sign_up(request):
             if user:
                 login(request, user)
                 
-                messages.add_message(request, messages.INFO, "Nice to see you again!")
+                messages.add_message(request, messages.INFO, 'Nice to see you again!')
             else:
                 messages.add_message(
                     request, messages.INFO, "We couldn't log in account with that data."
                 )
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CustomUserSignUpForm(request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data["email"]
+            email = form.cleaned_data['email']
             user = form.save(commit=False)
             user.is_active = False
             user.save()
 
-            mail_subject = "Activate your user account."
+            mail_subject = 'Activate your user account.'
             message = render_to_string(
-                settings.BASE_DIR / "templates/email/account_activate_email.html",
+                settings.BASE_DIR / 'templates/email/account_activate_email.html',
                 {
-                    "user": user.email,
-                    "domain": get_current_site(request).domain,
-                    "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-                    "token": AccountActivationTokenGenerator().make_token(user),
-                    "protocol": "https" if request.is_secure() else "http",
+                    'user': user.email,
+                    'domain': get_current_site(request).domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': AccountActivationTokenGenerator().make_token(user),
+                    'protocol': 'https' if request.is_secure() else 'http',
                 },
             )
 
             mail = EmailMessage(mail_subject, message, to=[email])
 
             if mail.send():
-                messages.info(request, f"Check your {email} inbox to activate account.")
+                messages.info(request, f'Check your {email} inbox to activate account.')
             else:
                 messages.info(
                     request,
                     f"We couldn't send an email with activation link to {email}.",
                 )
 
-            return redirect("index")
+            return redirect('index')
         
-    context = {"log_in_form": log_in_form, 
-               "form": form,
-               "user": None}
+    context = {'log_in_form': log_in_form, 
+               'form': form,
+               'user': None}
 
-    return render(request, "sign_up.html", context)
+    return render(request, 'sign_up.html', context)
 
 
 def boxes(request):
@@ -282,14 +295,14 @@ def boxes(request):
     log_in_form = CustomUserLogInForm()
     filter_form = FilterForm()
 
-    if request.method == "POST":
+    if request.method == 'POST':
         log_in_form = CustomUserLogInForm(request.POST)
 
         if log_in_form.is_valid():
-            email = log_in_form.cleaned_data["email"]
-            password = log_in_form.cleaned_data["password1"]
+            email = log_in_form.cleaned_data['email']
+            password = log_in_form.cleaned_data['password1']
 
-            if not request.POST.get("remember"):
+            if not request.POST.get('remember'):
                 request.session.set_expiry(0)
             else:
                 request.session.set_expiry(2592000)
@@ -299,28 +312,28 @@ def boxes(request):
             if user:
                 login(request, user)
                 
-                messages.add_message(request, messages.INFO, "Nice to see you again!")
+                messages.add_message(request, messages.INFO, 'Nice to see you again!')
             else:
                 messages.add_message(
                     request, messages.INFO, "We couldn't log in account with that data."
                 )
     
-    if request.method == "POST":        
+    if request.method == 'POST':        
         form = FilterForm(request.POST)
 
         if form.is_valid():            
-            city = form.cleaned_data["city"]
-            radius = form.cleaned_data["radius"]
+            city = form.cleaned_data['city']
+            radius = form.cleaned_data['radius']
            
             if city and radius:
-                cities = pd.read_csv(settings.BASE_DIR / "static/cities_db.csv", sep=";")
+                cities = pd.read_csv(settings.BASE_DIR / 'static/cities_db.csv', sep=';')
                 
-                request.session["form_city"] = city
-                request.session["form_radius"] = radius
+                request.session['form_city'] = city
+                request.session['form_radius'] = radius
                 
-                city_row = cities.loc[cities["Name"] == city.title()]
+                city_row = cities.loc[cities['Name'] == city.title()]
                 
-                city_lat, city_lon = str(city_row["Coordinates"].iloc[0]).split(", ")
+                city_lat, city_lon = str(city_row['Coordinates'].iloc[0]).split(', ')
                 
                 tmp_box_filter = []
                 
@@ -328,23 +341,23 @@ def boxes(request):
                     if geopy.distance.geodesic((float(city_lat), float(city_lon)), (float(box.lat), float(box.lon))).m <= float(radius):
                         tmp_box_filter.append(box.id)
                 
-                request.session["box_filter"] = tmp_box_filter
+                request.session['box_filter'] = tmp_box_filter
             else:
-                request.session["form_city"] = ""
-                request.session["form_radius"] = ""
-                request.session["box_filter"] = [box.id for box in Box.objects.all()]
+                request.session['form_city'] = ''
+                request.session['form_radius'] = ''
+                request.session['box_filter'] = [box.id for box in Box.objects.all()]
         
-    if filter := request.session.get("box_filter"):
-        boxes = Box.objects.all().filter(id__in=filter).order_by("name")
-        form_city = request.session.get("form_city")
-        form_radius = request.session.get("form_radius")
+    if filter := request.session.get('box_filter'):
+        boxes = Box.objects.all().filter(id__in=filter).order_by('name')
+        form_city = request.session.get('form_city')
+        form_radius = request.session.get('form_radius')
     else:
-        boxes = Box.objects.all().order_by("name")
-        form_city = ""
-        form_radius = ""
+        boxes = Box.objects.all().order_by('name')
+        form_city = ''
+        form_radius = ''
     
     paginator = Paginator(boxes, 5)
-    page = request.GET.get("page")
+    page = request.GET.get('page')
     boxes = paginator.get_page(page)
     pages_count = boxes.paginator.num_pages
     
@@ -362,20 +375,20 @@ def boxes(request):
             max = n + 3
 
         page_numbers = list(range(min, max))
-        page_numbers.append("...")
+        page_numbers.append('...')
         page_numbers.append(pages_count)  
     
     context = {
-        "log_in_form": log_in_form,
-        "filter_form": filter_form,
-        "user": user,
-        "boxes": boxes,
-        "page_numbers": page_numbers,
-        "form_city": form_city,
-        "form_radius": form_radius,
+        'log_in_form': log_in_form,
+        'filter_form': filter_form,
+        'user': user,
+        'boxes': boxes,
+        'page_numbers': page_numbers,
+        'form_city': form_city,
+        'form_radius': form_radius,
     }
 
-    return render(request, "boxes.html", context)
+    return render(request, 'boxes.html', context)
 
 
 @login_required
@@ -387,24 +400,24 @@ def add_box(request):
     log_in_form = CustomUserLogInForm()
     form = AddBoxForm()
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = AddBoxForm(request.POST, request.FILES)
 
         if form.is_valid():
             try:
                 form.instance.user = user
                 form.save()
-                messages.add_message(request, messages.INFO, "Box added.")
+                messages.add_message(request, messages.INFO, 'Box added.')
                 
-                return redirect("boxes")
+                return redirect('boxes')
             except:
-                messages.add_message(request, messages.INFO, "Something went wrong.")
+                messages.add_message(request, messages.INFO, 'Something went wrong.')
 
-    context = {"log_in_form": log_in_form, 
-               "user": user, 
-               "form": form}
+    context = {'log_in_form': log_in_form, 
+               'user': user, 
+               'form': form}
 
-    return render(request, "add_box.html", context)
+    return render(request, 'add_box.html', context)
 
 
 def box(request, id):
@@ -413,19 +426,19 @@ def box(request, id):
     if request.user.is_authenticated:
         user = request.user
         
-    comments = Comment.objects.all().filter(box=id).order_by("-timestamp", )
+    comments = Comment.objects.all().filter(box=id).order_by('-timestamp', )
     
     log_in_form = CustomUserLogInForm()
     form = AddCommentForm()
     
-    if request.method == "POST":
+    if request.method == 'POST':
         log_in_form = CustomUserLogInForm(request.POST)
 
         if log_in_form.is_valid():
-            email = log_in_form.cleaned_data["email"]
-            password = log_in_form.cleaned_data["password1"]
+            email = log_in_form.cleaned_data['email']
+            password = log_in_form.cleaned_data['password1']
 
-            if not request.POST.get("remember"):
+            if not request.POST.get('remember'):
                 request.session.set_expiry(0)
             else:
                 request.session.set_expiry(2592000)
@@ -435,13 +448,13 @@ def box(request, id):
             if user:
                 login(request, user)
                 
-                messages.add_message(request, messages.INFO, "Nice to see you again!")
+                messages.add_message(request, messages.INFO, 'Nice to see you again!')
             else:
                 messages.add_message(
                     request, messages.INFO, "We couldn't log in account with that data."
                 )
     
-    if request.method == "POST":        
+    if request.method == 'POST':        
         form = AddCommentForm(request.POST)
 
         if form.is_valid():
@@ -452,10 +465,10 @@ def box(request, id):
                 
                 return redirect('box', id=id)
             except:
-                messages.add_message(request, messages.INFO, "Something went wrong.")
+                messages.add_message(request, messages.INFO, 'Something went wrong.')
     
     paginator = Paginator(comments, 5)
-    page = request.GET.get("page")
+    page = request.GET.get('page')
     comments = paginator.get_page(page)
     pages_count = comments.paginator.num_pages
     
@@ -473,14 +486,14 @@ def box(request, id):
             max = n + 3
 
         page_numbers = list(range(min, max))
-        page_numbers.append("...")
+        page_numbers.append('...')
         page_numbers.append(pages_count)  
     
-    context = {"log_in_form": log_in_form,
-               "user": user,
-               "box": Box.objects.get(id=id),
-               "comments": comments,
-               "page_numbers": page_numbers,
-               "form": form}
+    context = {'log_in_form': log_in_form,
+               'user': user,
+               'box': Box.objects.get(id=id),
+               'comments': comments,
+               'page_numbers': page_numbers,
+               'form': form}
     
-    return render(request, "box.html", context)
+    return render(request, 'box.html', context)

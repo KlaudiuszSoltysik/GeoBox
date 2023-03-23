@@ -34,17 +34,28 @@
       {% endif %}
       <h2>Newest comments:</h2>
       {% for comment in comments %}
+      {% if comment.user == user %}
+      <div class="row comment">
+        <div class="col-md-2">
+          <h4>{{ comment.user.nick }}</h4>
+        </div>
+        <div class="col-md-9">
+          <h4>{{ comment.comment }}</h4>
+        </div>
+        <div class="col-md-1">
+          <img data-comment_id="{{ comment.id }}" class="bin-icon" src="{% static 'images/bin-icon.png' %}">
+        </div>
+      </div>
+      {% else %}
       <div class="row comment">
         <div class="col-md-2">
           <h4>{{ comment.user.nick }}</h4>
         </div>
         <div class="col-md-10">
           <h4>{{ comment.comment }}</h4>
-          {% if comment.user == user %}
-          <img class="bin-icon" src="{% static 'images/bin-icon.png' %}">
-          {% endif %}
         </div>
       </div>
+      {% endif %}
       {% endfor %}
       <ul class="pagination justify-content-center">
         {% if comments.has_previous %}
