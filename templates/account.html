@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load templatetags %}
+
+{% block content %}
+
+{% for box in boxes %}
+<div class="container-lg box-container">
+  <div class="row box-div"
+    style="background-color: {{ box.img1|getDominantColor }}; background-image: url('{{ box.img1 }}')">
+    <div class="col-md-10">
+      <h1>{{ box.name }}</h1>
+      <h2 data-lat="{{ box.lat }}" data-lon="{{ box.lon }}" class="position"></h2>
+      <h2>{{ box.difficulty|stars }}</h2>
+    </div>
+    <div class="col-md-1">
+      <img onclick="deleteBox({{ box.id }}, this)" class="bin-icon" src="{% static 'images/bin-icon.png' %}">
+    </div>
+    <div class="col-md-1">
+      <a href="{% url 'edit_box' id=box.id %}"><img class="edit-icon" src="{% static 'images/edit-icon.png' %}"></a>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% for comment in comments %}
+<div class="row comment container-lg box-container" style="background-color: {{ comment.box.img1|getDominantColor }}">
+  <div class="col-md-10">
+    <h4>{{ comment.comment }}</h4>
+  </div>
+  <div class="col-md-1">
+    <img data-comment_id="{{ comment.id }}" onclick="deleteComment({{ comment.id }}, this)" class="bin-icon"
+      src="{% static 'images/bin-icon.png' %}">
+  </div>
+  <div class="col-md-1">
+    <a href="{% url 'edit_comment' id=comment.id %}"><img class="edit-icon"
+        src="{% static 'images/edit-icon.png' %}"></a>
+  </div>
+</div>
+{% endfor %}
+
+<script src="{% static 'scripts/account.js' %}"></script>
+{% endblock %}

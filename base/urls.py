@@ -15,5 +15,9 @@ urlpatterns = [
     path('add-box', views.add_box, name='add_box'),
     path('get-suggestions/<str:input>', views.get_suggestions, name='get_suggestions'),
     path('delete-comment/<int:id>', views.delete_comment, name='delete_comment'),
+    path('delete-box/<int:id>', views.delete_box, name='delete_box'),
     path('box/<int:id>', views.box, name='box'),
+    path('account', views.account, name='account'),
+    path('edit-comment/<int:id>', views.edit_comment, name='edit_comment'),
+    path('edit-box/<int:id>', views.edit_box, name='edit_box'),
 ]

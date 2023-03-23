@@ -72,7 +72,7 @@ class FilterForm(forms.Form):
     
 
 class AddCommentForm(forms.ModelForm):        
-    comment = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Comment'}))
+    comment = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'placeholder': 'Comment'}))
     
     class Meta:
         model = Comment

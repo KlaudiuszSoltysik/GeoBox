@@ -204,6 +204,9 @@ input[type=checkbox] {
   padding: 20px;
   margin: 0;
   border-radius: 20px;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
 }
 .box-container .col-1 {
   width: 225px;
@@ -276,15 +279,23 @@ input[type=checkbox] {
 }
 
 .comment {
-  margin: 12px;
+  margin: 12px auto;
   padding: 10px;
   border: 2px solid white;
   border-radius: 5px;
   width: calc(100% - 24px);
 }
-.comment .bin-icon {
+
+.bin-icon {
   display: block;
   width: 30px;
+  cursor: pointer;
+}
+
+.edit-icon {
+  display: block;
+  margin-top: 2px;
+  width: 25px;
   cursor: pointer;
 }
 

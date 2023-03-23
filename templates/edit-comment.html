@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load templatetags %}
+
+{% block content %}
+
+<div class="container-lg box-container">
+  <div class="box-div">
+    <div class="row">
+      <div class="add-comment">
+        <form autocomplete="off" method="POST">
+          <h1>Edit comment</h1>
+          {% csrf_token %}
+          {{ form.comment|as_crispy_field }}
+          <button type="submit" class="btn">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'scripts/box.js' %}"></script>
+{% endblock %}

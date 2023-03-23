@@ -21,7 +21,7 @@ import geopy.distance
 
 # dodać sortowanie
 # dadać nawigację do boxa
-# my account (boxy, komentarze, edycja, kasowanie)
+# my account (edycja)
 
 def log_out(request):
     logout(request)
@@ -167,6 +167,18 @@ def delete_comment(request, id):
             
         if comment.user == request.user:
             comment.delete()
+                
+        return JsonResponse({'success': 'true'})
+    else:
+        return HttpResponseBadRequest('Invalid request')
+    
+    
+def delete_box(request, id):
+    if request.method == 'DELETE':
+        box = Box.objects.get(id=id)
+            
+        if box.user == request.user:
+            box.delete()
                 
         return JsonResponse({'success': 'true'})
     else:
@@ -425,7 +437,7 @@ def box(request, id):
     if request.user.is_authenticated:
         user = request.user
         
-    comments = Comment.objects.all().filter(box=id).order_by('-timestamp', )
+    comments = Comment.objects.all().filter(box=id).order_by('-timestamp')
     
     log_in_form = CustomUserLogInForm()
     form = AddCommentForm()
@@ -457,14 +469,15 @@ def box(request, id):
         form = AddCommentForm(request.POST)
 
         if form.is_valid():
-            try:
-                form.instance.user = user
-                form.instance.box = Box.objects.get(id=id)
-                form.save()
-                
-                return redirect('box', id=id)
-            except:
-                messages.add_message(request, messages.INFO, 'Something went wrong.')
+            if form.instance.comment:
+                try:
+                    form.instance.user = user
+                    form.instance.box = Box.objects.get(id=id)
+                    form.save()
+                    
+                    return redirect('box', id=id)
+                except:
+                    messages.add_message(request, messages.INFO, 'Something went wrong.')
     
     context = {'log_in_form': log_in_form,
                'user': user,
@@ -473,3 +486,83 @@ def box(request, id):
                'form': form}
     
     return render(request, 'box.html', context)
+
+
+@login_required
+def account(request):
+    user = request.user
+    
+    reset_filters(request)
+
+    log_in_form = CustomUserLogInForm()
+    comments = Comment.objects.all().filter(user=user).order_by('box')
+    boxes = Box.objects.all().filter(user=user).order_by('name')
+
+    context = {'log_in_form': log_in_form, 
+               'user': user,
+               'boxes': boxes,
+               'comments': comments}
+
+    return render(request, 'account.html', context)
+
+
+@login_required
+def edit_comment(request, id):
+    user = request.user
+    
+    reset_filters(request)
+
+    comment = Comment.objects.get(id=id)
+
+    log_in_form = CustomUserLogInForm()
+    form = AddCommentForm(instance=comment)  
+
+    if request.method == 'POST':
+        form = AddCommentForm(request.POST)
+
+        if form.is_valid():
+            if comment.user == user:
+                try:
+                    form.save()
+                    
+                    messages.add_message(request, messages.INFO, 'Box saved.')
+                    
+                    return redirect('account')
+                except:
+                    messages.add_message(request, messages.INFO, 'Something went wrong.')
+
+    context = {'log_in_form': log_in_form, 
+               'user': user,
+               'form': form}
+
+    return render(request, 'edit-comment.html', context)
+
+
+@login_required
+def edit_box(request, id):
+    user = request.user
+    
+    reset_filters(request)
+
+    box = Box.objects.get(id=id)  
+    
+    log_in_form = CustomUserLogInForm()
+    form = AddBoxForm(instance=box)
+
+    if request.method == 'POST':
+        form = AddBoxForm(request.POST)
+
+        if form.is_valid():
+            if box.user == user:
+                form.save()
+                
+                try:
+                    return redirect('account')
+                except:
+                    messages.add_message(request, messages.INFO, 'Something went wrong.')
+
+    context = {'log_in_form': log_in_form, 
+               'user': user,
+               'form': form}
+
+    return render(request, 'edit-box.html', context)
