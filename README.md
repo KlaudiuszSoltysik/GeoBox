@@ -21,7 +21,9 @@ An user can:
 Additionally, a logged in user can:
 - log out
 - add boxes (find me button automatically complete latitude and longitude form fields)
+- comment
 - add and delete (AJAX) comments
 - view account (with all comments and boxes) (edit and delete options)
 ## Presentation
 Video-presentation link:
+https://youtu.be/4w9e5PXhfis
