@@ -65,6 +65,27 @@ class AddBoxForm(forms.ModelForm):
         model = Box
         fields = ('name', 'lat', 'lon', 'img1', 'img2', 'difficulty', 'description')
         
+        
+class EditBoxForm(forms.ModelForm):
+    DIFFICULTY =(
+    ('1', '★'),
+    ('2', '★★'),
+    ('3', '★★★'),
+    ('4', '★★★★'),
+    ('5', '★★★★★'))
+    
+    name = forms.CharField(label='Box name', widget=forms.TextInput(attrs={'placeholder': 'Box name'}))
+    lat = forms.FloatField(label='Latitude', min_value=-90, max_value=90, widget=forms.NumberInput(attrs={'placeholder': 'Box latitude'}))
+    lon = forms.FloatField(label='Longitude', min_value=-90, max_value=90, widget=forms.NumberInput(attrs={'placeholder': 'Box longitude'}))
+    img1 = forms.ImageField(label='Tip image', required=False, widget=forms.FileInput())
+    img2 = forms.ImageField(label='Optional tip image', required=False, widget=forms.FileInput())
+    difficulty = forms.ChoiceField(label='Difficulty level', choices=DIFFICULTY, widget=forms.RadioSelect(attrs={'placeholder': 'Difficulty level'}))
+    description = forms.CharField(label='Box description', required=False, widget=forms.Textarea(attrs={'placeholder': 'Box description'}))
+        
+    class Meta:
+        model = Box
+        fields = ('name', 'lat', 'lon', 'img1', 'img2', 'difficulty', 'description')
+        
 
 class FilterForm(forms.Form):
     city = forms.CharField(label='City', required=False, widget=forms.TextInput(attrs={'placeholder': 'City'}))

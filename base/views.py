@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpResponseBadRequest
 
 from .models import CustomUser, Box, Comment
-from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm, AddBoxForm, FilterForm, AddCommentForm
+from .forms import CustomUserSignUpForm, CustomUserLogInForm, CustomUserPasswordResetForm, CustomUserSetPasswordForm, AddBoxForm, FilterForm, AddCommentForm, EditBoxForm
 from .tokens import AccountActivationTokenGenerator, account_activation_token
 
 import pandas as pd
@@ -21,7 +21,6 @@ import geopy.distance
 
 # dodać sortowanie
 # dadać nawigację do boxa
-# my account (edycja)
 
 def log_out(request):
     logout(request)
@@ -519,13 +518,14 @@ def edit_comment(request, id):
 
     if request.method == 'POST':
         form = AddCommentForm(request.POST)
-
+        
         if form.is_valid():
             if comment.user == user:
                 try:
-                    form.save()
+                    comment.comment = form.instance.comment
+                    comment.save()
                     
-                    messages.add_message(request, messages.INFO, 'Box saved.')
+                    messages.add_message(request, messages.INFO, 'Comment edited.')
                     
                     return redirect('account')
                 except:
@@ -547,22 +547,37 @@ def edit_box(request, id):
     box = Box.objects.get(id=id)  
     
     log_in_form = CustomUserLogInForm()
-    form = AddBoxForm(instance=box)
+    form = EditBoxForm(instance=box)
 
     if request.method == 'POST':
-        form = AddBoxForm(request.POST)
+        form = EditBoxForm(request.POST, request.FILES)
 
         if form.is_valid():
-            if box.user == user:
-                form.save()
-                
+            if box.user == user:                
                 try:
+                    box.name = form.instance.name
+                    box.lat = form.instance.lat
+                    box.lon = form.instance.lon
+                    box.description = form.instance.description
+                    box.difficulty = form.instance.difficulty
+                    
+                    if img1 := form.instance.img1:
+                        box.img1 = img1
+                        
+                    if img2 := form.instance.img1:
+                        box.img2 = img2
+                        
+                    box.save()
+                    
+                    messages.add_message(request, messages.INFO, 'Box edited.')
+                    
                     return redirect('account')
                 except:
                     messages.add_message(request, messages.INFO, 'Something went wrong.')
 
     context = {'log_in_form': log_in_form, 
                'user': user,
-               'form': form}
+               'form': form,
+               'box': box}
 
     return render(request, 'edit-box.html', context)

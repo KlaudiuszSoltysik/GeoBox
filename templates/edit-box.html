@@ -5,17 +5,23 @@
 {% block content %}
 
 <div class="form-group sign-up-form container-fluid">
-  <form autocomplete="off" method="POST" action="{% url 'add_box' %}" enctype="multipart/form-data">
+  <form autocomplete="off" method="POST" action="{% url 'edit_box' id=box.id %}" enctype="multipart/form-data">
     {% csrf_token %}
     <h1>Edit box</h1>
     <div class="row">
       {{ form.name|as_crispy_field }}
       {{ form.lat|as_crispy_field }}{{ form.lon|as_crispy_field }}
       <a id="find-me-btn" class="btn sign-up-btn">Find me</a>
+      <img src="{{ box.img1.url }}" style="width: 50%;">
+      {% if box.img2 %}
+      <img src="{{ box.img2.url }}" style="width: 50%;">
+      {% else %}
+      <img style="width: 50%;">
+      {% endif %}
       {{ form.img1|as_crispy_field }}{{ form.img2|as_crispy_field }}
       {{ form.difficulty|as_crispy_field }}
       {{ form.description|as_crispy_field }}
-      <p id="length-counter">5000/5000</p>
+      <p id="length-counter"></p>
     </div>
     <button type="submit" class="btn log-in-btn">Save</button>
   </form>
