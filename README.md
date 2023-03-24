@@ -16,7 +16,8 @@ An user can:
 - filter nerby boxes (city and radius)
 - sort boxes
 - navigate to the box
-- view comments (show more comments button instead pagination)   \ 
+- view comments (show more comments button instead pagination)    
+    
 Additionally, a logged in user can:
 - log out
 - add boxes (find me button automatically complete latitude and longitude form fields)
