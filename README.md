@@ -16,13 +16,8 @@ An user can:
 - filter nerby boxes (city and radius) (city hints based on database with cities, sorted by population)
 - sort boxes
 - navigate to the box
-<<<<<<< HEAD
-- view comments (show more comments button instead pagination)  
-      
-=======
-- view comments (show more comments button instead pagination)    
-    
->>>>>>> c5ed00aac91f11841785572c05cacf3f61e35dbd
+- view comments (show more comments button instead pagination)        
+        
 Additionally, a logged in user can:
 - log out
 - add boxes (find me button automatically complete latitude and longitude form fields)
