@@ -13,7 +13,7 @@ An user can:
 - if he uses a browser he can download PWA    
 - navigate on the website and use links to other websites   
 - browse all boxes (with pagination) (box card contains distance-meter and compas to every box made using geolocation in JS) (box card is the same color as box image dominant color)
-- filter nerby boxes (city and radius)
+- filter nerby boxes (city and radius) (city hints based on database with cities, sorted by population)
 - sort boxes
 - navigate to the box
 - view comments (show more comments button instead pagination)    
