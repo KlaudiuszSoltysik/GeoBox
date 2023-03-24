@@ -13,11 +13,16 @@ An user can:
 - if he uses a browser he can download PWA    
 - navigate on the website and use links to other websites   
 - browse all boxes (with pagination) (box card contains distance-meter and compas to every box made using geolocation in JS) (box card is the same color as box image dominant color)
-- filter nerby boxes (city and radius)
+- filter nerby boxes (city and radius) (city hints based on database with cities, sorted by population)
 - sort boxes
 - navigate to the box
+<<<<<<< HEAD
 - view comments (show more comments button instead pagination)  
       
+=======
+- view comments (show more comments button instead pagination)    
+    
+>>>>>>> c5ed00aac91f11841785572c05cacf3f61e35dbd
 Additionally, a logged in user can:
 - log out
 - add boxes (find me button automatically complete latitude and longitude form fields)

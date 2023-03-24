@@ -251,43 +251,41 @@ def sign_up(request):
                 login(request, user)
                 
                 messages.add_message(request, messages.INFO, 'Nice to see you again!')
-            else:
-                messages.add_message(
-                    request, messages.INFO, "We couldn't log in account with that data."
-                )
+            
 
     if request.method == 'POST':
         form = CustomUserSignUpForm(request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data['email']
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
+            if len(form.cleaned_data['password1']) >= 8:
+                email = form.cleaned_data['email']
+                user = form.save(commit=False)
+                user.is_active = False
+                user.save()
 
-            mail_subject = 'Activate your user account.'
-            message = render_to_string(
-                settings.BASE_DIR / 'templates/email/account_activate_email.html',
-                {
-                    'user': user.email,
-                    'domain': get_current_site(request).domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': AccountActivationTokenGenerator().make_token(user),
-                    'protocol': 'https' if request.is_secure() else 'http',
-                },
-            )
-
-            mail = EmailMessage(mail_subject, message, to=[email])
-
-            if mail.send():
-                messages.info(request, f'Check your {email} inbox to activate account.')
-            else:
-                messages.info(
-                    request,
-                    f"We couldn't send an email with activation link to {email}.",
+                mail_subject = 'Activate your user account.'
+                message = render_to_string(
+                    settings.BASE_DIR / 'templates/email/account_activate_email.html',
+                    {
+                        'user': user.email,
+                        'domain': get_current_site(request).domain,
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token': AccountActivationTokenGenerator().make_token(user),
+                        'protocol': 'https' if request.is_secure() else 'http',
+                    },
                 )
 
-            return redirect('index')
+                mail = EmailMessage(mail_subject, message, to=[email])
+
+                if mail.send():
+                    messages.info(request, f'Check your {email} inbox to activate account.')
+                else:
+                    messages.info(
+                        request,
+                        f"We couldn't send an email with activation link to {email}.",
+                    )
+
+                return redirect('index')
         
     context = {'log_in_form': log_in_form, 
                'form': form,

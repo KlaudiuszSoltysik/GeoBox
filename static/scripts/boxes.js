@@ -101,7 +101,7 @@ function autocomplete(cityArray) {
 
         autocompleteField.innerHTML = '<strong>' + cityArray[i]['Name'].substr(0, cityField.value.length) + '</strong>';
         autocompleteField.innerHTML += cityArray[i]['Name'].substr(cityField.value.length);
-        autocompleteField.innerHTML += "<input type='hidden' value='' + cityArray[i]['Name'] + ''>";
+        autocompleteField.innerHTML += `<input type='hidden' value='${cityArray[i]['Name']}' + cityArray[i]['Name'] + ''>`;
 
         autocompleteField.addEventListener('click', function(e) {
             cityField.value = this.getElementsByTagName('input')[0].value;
