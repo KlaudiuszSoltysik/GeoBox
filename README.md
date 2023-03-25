@@ -1,6 +1,9 @@
 # GeoBox
 ## About 
 GeoBox is my version of a geocaching website. I had put the visual aspects aside and focused on technical aspects.
+## Presentation
+Video-presentation link:    
+https://youtu.be/YkYYv8SgCME
 ## Functions
 An user can:    
 - sign up (email, password and nickname) or log in
@@ -24,6 +27,3 @@ Additionally, a logged in user can:
 - comment
 - add and delete (AJAX) comments
 - view account (with all comments and boxes) (edit and delete options)
-## Presentation
-Video-presentation link:    
-https://youtu.be/YkYYv8SgCME
